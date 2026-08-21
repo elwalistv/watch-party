@@ -3,69 +3,157 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ELWALIS.COM</title>
+  <title>No se puede acceder a este sitio web</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #ffffff;
+      color: #202124;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
+    .error-container {
+      max-width: 600px;
+      margin-top: 20px;
+    }
+    .icon-offline {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+    .domain {
+      font-weight: 600;
+    }
+    p {
+      color: #5f6368;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    ul {
+      color: #5f6368;
+      font-size: 0.875rem;
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+    li {
+      margin-bottom: 6px;
+    }
+    a {
+      color: #1a0dab;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .error-code {
+      color: #5f6368;
+      font-size: 0.75rem;
+    }
+    .btn-reload {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      padding: 8px 24px;
+      font-size: 0.875rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-reload:hover {
+      background-color: #1b66c9;
+    }
+    /* Estilos para cuando esté EN VIVO (Muestra tu diseño original con video y chat) */
+    #live-layout {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #09090b;
+      z-index: 9999;
+    }
+  </style>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-zinc-950 text-white font-sans flex flex-col h-screen overflow-hidden">
+<body>
 
-  <!-- CABECERA DE LA PÁGINA -->
-  <header class="bg-zinc-900 border-b border-zinc-800 p-3 flex justify-between items-center">
-    <div class="flex items-center space-x-2">
-      <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
-      <h1 class="font-bold text-lg tracking-wide">ELWALIS.COM</h1>
-    </div>
-    <div class="text-xs text-zinc-400">
-      Transmisión en vivo
-    </div>
-  </header>
+  <!-- PANTALLA DE ERROR Falsa (Se muestra cuando estás APAGADO) -->
+  <div class="error-container" id="offline-screen">
+    <!-- Icono clásico de página triste de Chrome -->
+    <svg class="icon-offline" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+      <polyline points="14 2 14 8 20 8"></polyline>
+      <line x1="9" y1="15" x2="9" y2="15"></line>
+      <line x1="15" y1="15" x2="15" y2="15"></line>
+      <path d="M9 18c.5 1 1.5 1.5 3 1.5s2.5-.5 3-1.5"></path>
+    </svg>
 
-  <!-- CONTENIDO PRINCIPAL (VIDEO + CHAT) -->
-  <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
+    <h1>No se puede acceder a este sitio web</h1>
+    <p><span class="domain" id="current-domain">elwalis.com</span> ha tardado demasiado en tiempo en responder.</p>
+    
+    <p>Prueba a:</p>
+    <ul>
+      <li>Comprobar la conexión</li>
+      <li>Comprobar el proxy y el cortafuegos</li>
+      <li>Ejecutar Diagnósticos de red de Windows</li>
+    </ul>
 
-    <!-- ÁREA DE VIDEO PRINCIPAL -->
-    <main class="flex-1 bg-black flex items-center justify-center relative p-2">
-      
-      <!-- Contenedor del video (Se oculta si no estás EN VIVO) -->
-      <div id="stream-container" class="hidden relative w-full h-full rounded-lg overflow-hidden">
-        <iframe
-          src="https://player.kick.com/eltopo12345"
-          class="w-full h-full border-0"
-          allowfullscreen>
-        </iframe>
+    <div class="error-code">ERR_CONNECTION_TIMED_OUT</div>
 
-        <!-- Capas invisibles que bloquean clics para no redirigir a Kick -->
-        <div class="absolute top-0 right-0 w-72 h-16 bg-transparent z-10"></div>
-        <div class="absolute bottom-0 right-12 w-52 h-10 bg-transparent z-10"></div>
-      </div>
-
-      <!-- Mensaje cuando el directo está APAGADO -->
-      <div id="offline-message" class="flex flex-col items-center justify-center text-center p-6">
-        <div class="w-12 h-12 mb-3 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-        </div>
-        <h2 class="text-lg font-bold">El directo ha finalizado</h2>
-        <p class="text-sm text-zinc-400 max-w-sm mt-1">La transmisión no está disponible. El reproductor volverá automáticamente cuando volvamos a estar en vivo.</p>
-      </div>
-
-    </main>
-
-    <!-- COLUMNA DERECHA: CHAT DE TU CANAL PRINCIPAL -->
-    <aside class="w-full md:w-80 h-64 md:h-full bg-zinc-900 border-l border-zinc-800">
-      <iframe
-        src="https://kick.com/popout/elwalis/chat"
-        class="w-full h-full border-0">
-      </iframe>
-    </aside>
-
+    <button class="btn-reload" onclick="location.reload()">Volver a cargar</button>
   </div>
 
-  <!-- SCRIPT DE DETECCIÓN AUTOMÁTICA -->
+  <!-- PANTALLA EN VIVO (Aparece automáticamente cuando prendes OBS) -->
+  <div id="live-layout">
+    <div class="flex flex-col h-screen overflow-hidden w-full">
+      
+      <!-- Cabecera -->
+      <header class="bg-zinc-900 border-b border-zinc-800 p-3 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
+          <h1 class="font-bold text-lg tracking-wide text-white">ELWALIS.COM</h1>
+        </div>
+        <div class="text-xs text-zinc-400">Transmisión en vivo</div>
+      </header>
+
+      <!-- Contenido (Video + Chat) -->
+      <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
+        <main class="flex-1 bg-black flex items-center justify-center relative p-2">
+          <div class="relative w-full h-full rounded-lg overflow-hidden">
+            <iframe src="https://player.kick.com/eltopo12345" class="w-full h-full border-0" allowfullscreen></iframe>
+            <!-- Capas anti-clics de Kick -->
+            <div class="absolute top-0 right-0 w-72 h-16 bg-transparent z-10"></div>
+            <div class="absolute bottom-0 right-12 w-52 h-10 bg-transparent z-10"></div>
+          </div>
+        </main>
+        <aside class="w-full md:w-80 h-64 md:h-full bg-zinc-900 border-l border-zinc-800">
+          <iframe src="https://kick.com/popout/elwalis/chat" class="w-full h-full border-0"></iframe>
+        </aside>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT DE DETECCIÓN Y AUTOMATIZACIÓN -->
   <script>
+    // Muestra automáticamente el dominio actual en el texto de error
+    document.getElementById('current-domain').innerText = window.location.hostname;
+
     const CHANNEL_NAME = 'eltopo12345';
-    const streamContainer = document.getElementById('stream-container');
-    const offlineMessage = document.getElementById('offline-message');
+    const liveLayout = document.getElementById('live-layout');
+    const offlineScreen = document.getElementById('offline-screen');
 
     async function checkStreamStatus() {
       try {
@@ -73,14 +161,16 @@
         const data = await response.json();
 
         if (data && data.livestream !== null) {
-          streamContainer.classList.remove('hidden');
-          offlineMessage.classList.add('hidden');
+          // ESTÁ EN VIVO: Oculta el error de Chrome y muestra el reproductor
+          offlineScreen.style.display = 'none';
+          liveLayout.style.display = 'block';
         } else {
-          streamContainer.classList.add('hidden');
-          offlineMessage.classList.remove('hidden');
+          // ESTÁ APAGADO: Muestra la pantalla de error de Chrome y oculta el video
+          liveLayout.style.display = 'none';
+          offlineScreen.style.display = 'block';
         }
       } catch (error) {
-        console.error('Error al verificar el estado del directo:', error);
+        console.error('Error al verificar el estado:', error);
       }
     }
 
