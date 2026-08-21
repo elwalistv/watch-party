@@ -6,59 +6,41 @@
     <title>El Walis - Live Watch Party</title>
     <style>
         body, html { 
-            margin: 0; 
-            padding: 0; 
-            height: 100%; 
-            overflow: hidden; 
-            background-color: #121212; 
-        }
-        
-        #video-container { 
-            width: 100%; 
-            height: 100%; 
-            position: relative; 
-        }
-        
-        /* Reproductor de Rumble incrustado */
-        iframe { 
-            width: 100%; 
-            height: 100%; 
-            border: none; 
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 5;
-        }
-
-        /* Pantalla de error falsa (se muestra de fondo o si llega a fallar) */
-        #error-screen {
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%;
-            background-color: #f1f1f1; 
-            display: flex; 
-            flex-direction: column;
-            justify-content: center; 
-            align-items: center; 
+            margin: 0; padding: 0; height: 100%; 
+            overflow: hidden; background-color: #121212; 
             font-family: sans-serif;
-            z-index: 1;
+        }
+        #video-container { 
+            width: 100%; height: 100%; position: relative; 
+        }
+        iframe { 
+            width: 100%; height: 100%; border: none; 
+            position: absolute; top: 0; left: 0; z-index: 5;
+        }
+        #error-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #f1f1f1; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 1;
+        }
+        .btn-directo {
+            margin-top: 15px; padding: 10px 20px; background: #85c742;
+            color: white; text-decoration: none; font-weight: bold; border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
     <div id="video-container">
-        <!-- PANTALLA DE ERROR: Simula el bloqueo de Chrome -->
+        <!-- PANTALLA DE ERROR CON ACCESO DIRECTO -->
         <div id="error-screen">
             <h1 style="color: #333; margin-bottom: 5px;">⚠️ Error de conexión</h1>
-            <p style="color: #666;">La página <b>rumble.com</b> ha rechazado la conexión.</p>
+            <p style="color: #666;">La página <b>rumble.com</b> ha rechazado la conexión o el stream está apagado.</p>
+            <a class="btn-directo" href="https://rumble.com/v7eg998-holis-estream-de-prueba.html" target="_blank">Ver directo en Rumble</a>
         </div>
 
-        <!-- REPRODUCTOR OFICIAL DE RUMBLE CON TU ENLACE -->
+        <!-- REPRODUCTOR DE RUMBLE -->
         <iframe 
-            src="https://rumble.com/embed/v7eg998/" 
+            src="https://rumble.com/embed/v7eg998/?pub=4" 
             allowfullscreen 
             scrolling="no" 
             frameborder="0">
