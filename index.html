@@ -2,41 +2,46 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Mi Watch Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>elwalis.com</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-black text-white h-screen flex flex-col font-sans overflow-hidden">
+<body class="bg-zinc-950 text-white font-sans flex flex-col h-screen overflow-hidden">
 
-  <!-- BARRA SUPERIOR: METAS -->
-  <header class="bg-zinc-900 text-center py-2 font-bold text-yellow-400 text-sm md:text-base border-b border-zinc-800">
-    0.2/40K KICKS = COSPLAY | 11/12 SUBS KICK = CAP EXTRA
+  <!-- CABECERA DE LA PÁGINA -->
+  <header class="bg-zinc-900 border-b border-zinc-800 p-3 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
+      <h1 class="font-bold text-lg tracking-wide">ELWALIS.COM</h1>
+    </div>
+    <div class="text-xs text-zinc-400">
+      Transmisión en vivo
+    </div>
   </header>
 
   <!-- CONTENIDO PRINCIPAL (VIDEO + CHAT) -->
   <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
-    
+
     <!-- ÁREA DE VIDEO PRINCIPAL -->
     <main class="flex-1 bg-black flex items-center justify-center relative p-2">
-      <!-- Cambia elwalistv por tu usuario si no es este -->
-      <iframe 
-src="https://www.youtube.com/embed/hf53HClKmIo?autoplay=1"
-        class="w-full h-full border-0 rounded-lg" 
+      <iframe
+        src="https://player.kick.com/eltopo12345"
+        class="w-full h-full border-0 rounded-lg"
         allowfullscreen>
       </iframe>
     </main>
 
     <!-- COLUMNA DERECHA: CHAT -->
     <aside class="w-full md:w-80 h-64 md:h-full bg-zinc-900 border-l border-zinc-800">
-      <!-- Cambia elwalistv por tu usuario si no es este -->
-      <iframe 
-        src="https://kick.com/popout/elwalistv/chat" 
+      <iframe
+        src="https://kick.com/popout/elwalistv/chat"
         class="w-full h-full border-0">
       </iframe>
     </aside>
 
   </div>
 
-  <!-- BARRA INFERIOR: BOTONES -->
+  <!-- BARRA INFERIOR: BOTONES DE REDES -->
   <footer class="bg-zinc-900 p-3 flex justify-center gap-4 border-t border-zinc-800">
     <a href="https://youtube.com" target="_blank" class="bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded font-bold text-sm">YouTube</a>
     <a href="https://kick.com/elwalistv" target="_blank" class="bg-green-500 hover:bg-green-600 text-black px-4 py-1.5 rounded font-bold text-sm">Suscribirse en Kick</a>
