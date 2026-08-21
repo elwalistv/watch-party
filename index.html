@@ -5,35 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Watch Party ElWalis</title>
     <style>
-        /* ESTILOS CSS: Pantalla completa y diseño limpio estilo Jivencio */
+        /* Fondo general de la página en negro */
         body {
             margin: 0;
             padding: 0;
-            background-color: #000; /* Fondo negro elegante */
-            overflow: hidden;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
-            width: 100vw;
         }
 
+        /* Contenedor 16:9 estricto para asegurar que el video siempre tenga dimensiones */
         .video-container {
             position: relative;
             width: 100%;
-            height: 100%;
+            max-width: 1280px; /* Ancho máximo para que no se deforme en pantallas gigantes */
+            aspect-ratio: 16 / 9; /* Mantiene la proporción perfecta de video */
+            background-color: #000;
             overflow: hidden;
-            background: #000;
+            border-radius: 12px;
         }
 
-        /* Truco para recortar la barra de título superior de YouTube */
+        /* El reproductor se estira dentro del contenedor seguro */
         #yt-player {
             position: absolute;
-            top: -60px;
+            top: -10%;
             left: 0;
             width: 100%;
-            height: calc(100% + 120px);
-            pointer-events: auto;
+            height: 120%; /* Ampliado para recortar los bordes de YouTube */
+            border: none;
         }
 
-        /* Capa transparente que bloquea el mouse para que no aparezcan los controles de YouTube */
+        /* Capa invisible que bloquea el mouse para que nadie toque los controles de YouTube */
         .mouse-blocker {
             position: absolute;
             top: 0;
@@ -41,7 +45,6 @@
             width: 100%;
             height: 100%;
             background: transparent;
-            pointer-events: auto;
             z-index: 10;
         }
     </style>
@@ -49,19 +52,17 @@
 <body>
 
     <div class="video-container">
-        <!-- Contenedor donde se insertará el reproductor de YouTube -->
+        <!-- Aquí la API inyectará el video -->
         <div id="yt-player"></div>
-        
-        <!-- Bloqueador de interacción para evitar que vean o toquen los controles -->
+        <!-- Capa anti-interacción -->
         <div class="mouse-blocker"></div>
     </div>
 
     <!-- SCRIPT DE LA API DE YOUTUBE -->
     <script>
-        // ID de tu transmisión actual en YouTube
+        // Tu ID de transmisión actual
         var myVideoId = 'eUlnicOwdc4'; 
 
-        // Carga la API de YouTube de forma dinámica
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -69,45 +70,35 @@
 
         var player;
 
-        // Se ejecuta automáticamente cuando la API de YouTube carga
         function onYouTubeIframeApiReady() {
             player = new YT.Player('yt-player', {
                 videoId: myVideoId,
                 playerVars: {
-                    'autoplay': 1,          // Forzar reproducción automática
-                    'controls': 0,          // Ocultar controles nativos
-                    'showinfo': 0,          // Ocultar información
-                    'modestbranding': 1,    // Minimizar logo de YouTube
-                    'rel': 0,               // Evitar videos relacionados al final
-                    'loop': 1,              // Mantener en bucle
+                    'autoplay': 1,
+                    'controls': 0,
+                    'showinfo': 0,
+                    'modestbranding': 1,
+                    'rel': 0,
+                    'loop': 1,
                     'playlist': myVideoId,
-                    'iv_load_policy': 3     // Ocultar anotaciones
+                    'iv_load_policy': 3
                 },
                 events: {
                     'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange,
-                    'onError': onPlayerError
+                    'onStateChange': onPlayerStateChange
                 }
             });
         }
 
-        // Cuando el reproductor está listo para funcionar
         function onPlayerReady(event) {
-            // Nota: Los navegadores modernos exigen silenciar para el autoplay inicial garantizado
-            event.target.mute(); 
+            event.target.mute(); // Silenciado obligatorio para garantizar autoplay limpio
             event.target.playVideo();
         }
 
-        // Control de estados por si el stream se pausa o termina
         function onPlayerStateChange(event) {
             if (event.data == YT.PlayerState.ENDED) {
                 player.playVideo();
             }
-        }
-
-        // Manejo de errores de carga por si la transmisión tarda en conectar
-        function onPlayerError(event) {
-            console.log("Error en el reproductor de YouTube, codigo: ", event.data);
         }
     </script>
 
