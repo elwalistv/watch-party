@@ -7,201 +7,102 @@
     <style>
         body {
             margin: 0;
-            padding: 20px;
-            background-color: #0b0b0b;
-            color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            padding: 0;
+            background-color: #000;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
+            height: 100vh;
+            overflow: hidden;
+            font-family: sans-serif;
         }
 
-        .main-layout {
+        /* Contenedor principal que mantiene proporción y permite ocultar elementos de Kick */
+        .wrapper {
             display: grid;
             grid-template-columns: 1fr 340px;
-            gap: 20px;
-            width: 100%;
-            max-width: 1600px;
+            gap: 15px;
+            width: 95vw;
             height: 90vh;
-            max-height: 900px;
         }
 
         .left-column {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            height: 100%;
+            gap: 10px;
         }
 
         .video-container {
             position: relative;
             width: 100%;
             flex-grow: 1;
-            aspect-ratio: 16 / 9;
-            background-color: #000000;
-            overflow: hidden;
+            background: #000;
             border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            overflow: hidden; /* CORTA LOS ELEMENTOS DE KICK */
         }
 
-        .video-container iframe {
+        /* Zoom para que los logos y botones de Kick queden fuera del cuadro */
+        #kick-iframe {
+            position: absolute;
+            top: -2%;
+            left: -2%;
+            width: 104%;
+            height: 104%;
+            border: 0;
+        }
+
+        /* Capa invisible que bloquea el clic hacia la web de Kick */
+        .mouse-blocker {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border: 0;
+            background: transparent;
+            z-index: 5;
+            pointer-events: auto;
         }
 
-        /* Barra de controles flotante personalizada sobre el video */
-        .custom-controls {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            display: flex;
-            gap: 10px;
-            z-index: 20;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 8px 12px;
-            border-radius: 8px;
-            backdrop-filter: blur(5px);
-        }
-
-        .ctrl-btn {
-            background: #27272a;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-
-        .ctrl-btn:hover {
-            background: #3f3f46;
-        }
-
-        .social-bar {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            padding: 12px 20px;
-            background-color: #161618;
-            border-radius: 10px;
-            border: 1px solid #27272a;
-        }
-
-        .social-bar span {
-            font-weight: bold;
-            font-size: 14px;
-            color: #a1a1aa;
-        }
-
-        .social-btn {
-            background-color: #27272a;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-
-        .social-btn:hover {
-            background-color: #3f3f46;
-        }
-
+        /* Contenedor del Chat */
         .chat-container {
-            width: 100%;
-            height: 100%;
-            background-color: #161618;
+            background: #111;
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid #27272a;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
         }
 
-        .chat-container iframe {
+        #chat-iframe {
             width: 100%;
             height: 100%;
             border: 0;
-            background-color: #161618;
         }
 
-        @media (max-width: 1024px) {
-            .main-layout {
-                grid-template-columns: 1fr;
-                height: auto;
-            }
-            .chat-container {
-                height: 500px;
-            }
+        /* Diseño responsivo */
+        @media (max-width: 900px) {
+            .wrapper { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <div class="main-layout">
-        
-        <!-- SECCIÓN IZQUIERDA: Reproductor y Redes -->
+    <div class="wrapper">
         <div class="left-column">
             <div class="video-container" id="videoBox">
-                <!-- Reproductor principal de Kick configurado con controles nativos visibles -->
+                <!-- REEMPLAZA eltopo12345 por tu usuario -->
                 <iframe 
-                    id="kickPlayer"
+                    id="kick-iframe"
                     src="https://player.kick.com/eltopo12345?autoplay=true&muted=false" 
-                    title="Watch Party Stream" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                     allowfullscreen>
                 </iframe>
-
-                <!-- Botones de control rápido flotantes (Pantalla Completa) -->
-                <div class="custom-controls">
-                    <button class="ctrl-btn" onclick="toggleFullscreen()">⛶ Pantalla Completa</button>
-                </div>
-            </div>
-
-            <div class="social-bar">
-                <span>REDES:</span>
-                <a href="https://kick.com/eltopo12345" target="_blank" class="social-btn">Kick</a>
-                <a href="https://twitter.com/TuUsuario" target="_blank" class="social-btn">Twitter / X</a>
-                <a href="https://discord.gg/TuDiscord" target="_blank" class="social-btn">Discord</a>
+                <!-- Escudo invisible para evitar redirecciones -->
+                <div class="mouse-blocker"></div>
             </div>
         </div>
 
-        <!-- SECCIÓN DERECHA: Chat -->
         <div class="chat-container">
-            <iframe src="https://kick.com/popout/eltopo12345/chat" title="Chat de Kick"></iframe>
+            <iframe id="chat-iframe" src="https://kick.com/popout/eltopo12345/chat"></iframe>
         </div>
-
     </div>
-
-    <script>
-        // Función para activar la pantalla completa de todo el contenedor de video
-        function toggleFullscreen() {
-            var elem = document.getElementById("videoBox");
-            if (!document.fullscreenElement) {
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.webkitRequestFullscreen) { /* Safari */
-                    elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) { /* IE11 */
-                    elem.msRequestFullscreen();
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
-            }
-        }
-    </script>
 
 </body>
 </html>
