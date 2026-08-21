@@ -3,71 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watch Party Minimalista</title>
+    <title>Watch Party ElWalis</title>
     <style>
-        /* ESTILOS CSS: Hacen que el reproductor se vea limpio y flexible */
+        /* ESTILOS CSS: Pantalla completa y diseño limpio estilo Jivencio */
         body {
             margin: 0;
             padding: 0;
-            background-color: #000; /* Fondo negro para evitar destellos blancos */
-            overflow: hidden; /* Evita barras de desplazamiento */
+            background-color: #000; /* Fondo negro elegante */
+            overflow: hidden;
             height: 100vh;
+            width: 100vw;
         }
 
-        /* Contenedor principal del video */
         .video-container {
             position: relative;
-            width: 100vw;
-            height: 100vh; /* Ocupa toda la pantalla */
+            width: 100%;
+            height: 100%;
             overflow: hidden;
+            background: #000;
         }
 
-        /* El iframe de YouTube */
+        /* Truco para recortar la barra de título superior de YouTube */
         #yt-player {
             position: absolute;
-            /* Truco para ocultar la barra de título superior de YouTube:
-               Hacemos el video más grande y lo subimos 50px. */
-            top: -50px;
+            top: -60px;
             left: 0;
             width: 100%;
-            height: calc(100% + 100px); /* Aumenta la altura para compensar el corte */
-            pointer-events: auto; /* Necesario para que el reproductor funcione */
+            height: calc(100% + 120px);
+            pointer-events: auto;
         }
 
-        /* LA CAPA MÁGICA DE BLOQUEO:
-           Esta capa invisible se pone ENCIMA del video.
-           Impide que el usuario mueva el mouse sobre YouTube y que aparezcan los controles. */
+        /* Capa transparente que bloquea el mouse para que no aparezcan los controles de YouTube */
         .mouse-blocker {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: transparent; /* Es completamente transparente */
-            pointer-events: auto; /* Bloquea el mouse para que no llegue al reproductor */
-            z-index: 10; /* Asegura que esté por encima del video */
+            background: transparent;
+            pointer-events: auto;
+            z-index: 10;
         }
     </style>
 </head>
 <body>
 
-    <!-- EL REPRODUCTOR -->
     <div class="video-container">
-        <!-- Aquí se cargará el video de YouTube por medio de JavaScript -->
+        <!-- Contenedor donde se insertará el reproductor de YouTube -->
         <div id="yt-player"></div>
         
-        <!-- Esta capa invisible bloquea los controles de YouTube -->
+        <!-- Bloqueador de interacción para evitar que vean o toquen los controles -->
         <div class="mouse-blocker"></div>
     </div>
 
-    <!-- CÓDIGO JAVASCRIPT: Controla el reproductor y aplica el diseño de Jivencio -->
+    <!-- SCRIPT DE LA API DE YOUTUBE -->
     <script>
-        // --- CONFIGURACIÓN ---
-        // Pega AQUÍ tu ID de video de YouTube (el que sacaste de la barra de direcciones)
+        // ID de tu transmisión actual en YouTube
         var myVideoId = 'eUlnicOwdc4'; 
-        // ---------------------
 
-        // Carga la API de YouTube asíncronamente
+        // Carga la API de YouTube de forma dinámica
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -75,43 +69,45 @@
 
         var player;
 
-        // Esta función se ejecuta cuando la API de YouTube está lista
+        // Se ejecuta automáticamente cuando la API de YouTube carga
         function onYouTubeIframeApiReady() {
             player = new YT.Player('yt-player', {
                 videoId: myVideoId,
                 playerVars: {
-                    'autoplay': 1,           // Auto reproducir
-                    'controls': 0,           // Ocultar controles nativos
-                    'showinfo': 0,           // Ocultar información del video
-                    'modestbranding': 1,     // Marca mínima de YT
-                    'rel': 0,                // No mostrar videos relacionados al final
-                    'loop': 1,               // Bucle (repetir video)
-                    'playlist': myVideoId,   // Necesario para el loop
-                    'iv_load_policy': 3      // Ocultar anotaciones
+                    'autoplay': 1,          // Forzar reproducción automática
+                    'controls': 0,          // Ocultar controles nativos
+                    'showinfo': 0,          // Ocultar información
+                    'modestbranding': 1,    // Minimizar logo de YouTube
+                    'rel': 0,               // Evitar videos relacionados al final
+                    'loop': 1,              // Mantener en bucle
+                    'playlist': myVideoId,
+                    'iv_load_policy': 3     // Ocultar anotaciones
                 },
                 events: {
                     'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
+                    'onStateChange': onPlayerStateChange,
+                    'onError': onPlayerError
                 }
             });
         }
 
-        // Cuando el reproductor está listo
+        // Cuando el reproductor está listo para funcionar
         function onPlayerReady(event) {
-            // IMPORTANTE: Silencia el video al principio para garantizar que
-            // el navegador permita la reproducción automática (autoplay).
+            // Nota: Los navegadores modernos exigen silenciar para el autoplay inicial garantizado
             event.target.mute(); 
             event.target.playVideo();
-            
-            // Si quieres que el video tenga sonido, tendrás que notificar a los
-            // usuarios que hagan un clic inicial en la página para activar el audio.
         }
 
-        // Asegura que el video siga en bucle si termina
+        // Control de estados por si el stream se pausa o termina
         function onPlayerStateChange(event) {
             if (event.data == YT.PlayerState.ENDED) {
                 player.playVideo();
             }
+        }
+
+        // Manejo de errores de carga por si la transmisión tarda en conectar
+        function onPlayerError(event) {
+            console.log("Error en el reproductor de YouTube, codigo: ", event.data);
         }
     </script>
 
