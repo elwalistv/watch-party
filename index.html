@@ -1,126 +1,29 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Walis - Watch Party</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body, html { 
-            height: 100vh; 
-            background-color: #0b0b0e; 
-            font-family: Inter, system-ui, sans-serif; 
-            color: #efeff1;
-            overflow: hidden;
-        }
+<div class="video-container">
+  <iframe 
+    src="https://www.youtube-nocookie.com/embed/eUlnicOwdc4?autoplay=1&controls=1&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1" 
+    title="Watch Party" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+    allowfullscreen>
+  </iframe>
+</div>
 
-        /* Estructura principal en cuadrícula */
-        .page-layout {
-            display: grid;
-            grid-template-columns: 1fr 340px; /* Video al centro, chat a la derecha */
-            grid-template-rows: 1fr 50px;    /* Contenido arriba, barra de botones abajo */
-            height: 100vh;
-            width: 100vw;
-        }
-
-        /* Contenedor central del video */
-        .main-stream-area {
-            grid-column: 1 / 2;
-            grid-row: 1 / 2;
-            background-color: #000;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .main-stream-area iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Chat lateral derecho */
-        .chat-sidebar {
-            grid-column: 2 / 3;
-            grid-row: 1 / 2;
-            background-color: #18181b;
-            border-left: 1px solid #2f2f35;
-        }
-
-        .chat-sidebar iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Barra de navegación inferior con botones */
-        .bottom-nav-bar {
-            grid-column: 1 / 3;
-            grid-row: 2 / 3;
-            background-color: #0e0e10;
-            border-top: 1px solid #2f2f35;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 0 15px;
-        }
-
-        /* Estilo de los botones inferiores */
-        .nav-button {
-            display: inline-flex;
-            align-items: center;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 700;
-            text-decoration: none;
-            color: white;
-            transition: opacity 0.2s;
-        }
-
-        .nav-button:hover {
-            opacity: 0.85;
-        }
-
-        .btn-youtube { background-color: #ff0000; }
-        .btn-kick { background-color: #53fc18; color: #000; }
-        .btn-patreon { background-color: #ff424d; }
-        .btn-subscribe { background-color: #9146ff; }
-    </style>
-</head>
-<body>
-
-    <div class="page-layout">
-        
-        <!-- VIDEO PRINCIPAL -->
-        <div class="main-stream-area">
-            <!-- Reemplaza el src con tu reproductor o enlace -->
-            <iframe 
-                src="https://player.kick.com/tu_usuario" 
-                allowfullscreen="true" 
-                scrolling="no">
-            </iframe>
-        </div>
-
-        <!-- CHAT LATERAL -->
-        <div class="chat-sidebar">
-            <!-- Reemplaza el src con el chat de tu plataforma -->
-            <iframe 
-                src="https://kick.com/tu_usuario/chatroom">
-            </iframe>
-        </div>
-
-        <!-- BARRA INFERIOR DE BOTONES -->
-        <div class="bottom-nav-bar">
-            <a href="https://youtube.com" target="_blank" class="nav-button btn-youtube">YouTube</a>
-            <a href="https://kick.com" target="_blank" class="nav-button btn-kick">Suscribirse</a>
-            <a href="https://patreon.com" target="_blank" class="nav-button btn-patreon">Patreon</a>
-            <a href="#" class="nav-button btn-subscribe">Suscribirse</a>
-        </div>
-
-    </div>
-
-</body>
-</html>
+<style>
+  .video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: 0;
+    background-color: #0b0b0b;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>
