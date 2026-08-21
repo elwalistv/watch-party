@@ -1,31 +1,68 @@
-<div class="video-container">
-  <iframe 
-    src="https://www.youtube-nocookie.com/embed/eUlnicOwdc4?autoplay=1&controls=1&modestbranding=1&rel=0&iv_load_policy=3" 
-    title="Watch Party" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-    allowfullscreen>
-  </iframe>
-</div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Party Kick - ElWalis</title>
+    <style>
+        /* Fondo negro absoluto para evitar cualquier destello o pantalla blanca */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-<style>
-  .video-container {
-    position: relative;
-    width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding-bottom: 56.25%; /* Relación de aspecto 16:9 perfecta */
-    height: 0;
-    background-color: #000; /* Fondo negro para evitar destellos blancos al cargar */
-    overflow: hidden;
-    border-radius: 12px;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-</style>
+        /* Contenedor principal con proporción 16:9 perfecta */
+        .kick-container {
+            position: relative;
+            width: 100%;
+            max-width: 1280px;
+            aspect-ratio: 16 / 9;
+            background-color: #000000;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        /* El iframe del reproductor de Kick configurado para ocultar elementos */
+        .kick-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Capa invisible opcional de bloqueo para evitar clics accidentales o redirecciones */
+        .mouse-blocker {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 10;
+            pointer-events: none; /* Cambiar a 'auto' si quieres bloquear completamente la interacción de los usuarios */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="kick-container">
+        <!-- Reemplaza "eltopo12345" por tu nombre de usuario exacto en Kick -->
+        <iframe 
+            src="https://player.kick.com/eltopo12345?autoplay=true&muted=false" 
+            title="Watch Party Kick" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+        <div class="mouse-blocker"></div>
+    </div>
+
+</body>
+</html>
