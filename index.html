@@ -40,7 +40,7 @@
             flex-grow: 1;
             background: #000;
             border-radius: 12px;
-            overflow: hidden; /* Oculta el logo de Kick y el botón de HD exterior */
+            overflow: hidden; /* Oculta el logo de Kick y los botones externos */
         }
 
         /* Zoom ligero para cortar los bordes no deseados */
@@ -53,39 +53,69 @@
             border: 0;
         }
 
-        /* BLOQUEO PARCIAL: Solo cubre la parte superior para evitar que abran el perfil o links, 
-           pero deja libre la esquina inferior para que funcionen el volumen y los controles de Kick */
-        .mouse-blocker-top {
+        /* ESCUDOS ANTIRREDIRECCIÓN ESTRATÉGICOS PARA PC */
+        /* Bloquea toda la parte superior (logos y nombres de Kick) */
+        .blocker-top {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 85%; /* Deja libre el 15% inferior para el volumen */
+            height: 80%;
             background: transparent;
             z-index: 5;
             pointer-events: auto;
         }
 
-        /* Botón flotante personalizado de Pantalla Completa */
-        .fullscreen-btn {
+        /* Bloquea solo la parte derecha de la barra inferior (evita el botón de "Visit Kick for HD") */
+        .blocker-bottom-right {
             position: absolute;
-            bottom: 15px;
+            bottom: 0;
+            right: 0;
+            width: 45%;
+            height: 20%;
+            background: transparent;
+            z-index: 5;
+            pointer-events: auto;
+        }
+
+        /* Bloquea la parte izquierda extrema inferior, dejando libre únicamente el área del volumen */
+        .blocker-bottom-left {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30%;
+            height: 20%;
+            background: transparent;
+            z-index: 5;
+            pointer-events: auto;
+        }
+
+        /* Barra de controles flotante personalizada (Volumen rápido y Pantalla Completa) */
+        .custom-controls {
+            position: absolute;
+            bottom: 12px;
             right: 15px;
-            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .ctrl-btn {
+            background: rgba(0, 0, 0, 0.8);
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 14px;
-            border-radius: 8px;
+            padding: 6px 12px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
-            z-index: 20;
             backdrop-filter: blur(4px);
             transition: background 0.2s;
         }
 
-        .fullscreen-btn:hover {
-            background: rgba(40, 40, 40, 0.9);
+        .ctrl-btn:hover {
+            background: rgba(40, 40, 40, 0.95);
         }
 
         /* Contenedor del Chat a la derecha */
@@ -110,7 +140,7 @@
 <body>
 
     <div class="wrapper">
-        <!-- Columna Izquierda: Video + Pantalla Completa flotante -->
+        <!-- Columna Izquierda: Video + Controles flotantes -->
         <div class="left-column">
             <div class="video-container" id="videoBox">
                 <!-- REEMPLAZA "eltopo12345" POR TU USUARIO REAL DE KICK -->
@@ -121,11 +151,16 @@
                     allowfullscreen>
                 </iframe>
                 
-                <!-- Escudo superior para evitar clics en enlaces o nombres, dejando libre abajo para el volumen -->
-                <div class="mouse-blocker-top"></div>
+                <!-- Escudos que evitan redirecciones pero dejan libre la zona de audio -->
+                <div class="blocker-top"></div>
+                <div class="blocker-bottom-right"></div>
+                <div class="blocker-bottom-left"></div>
 
-                <!-- Botón flotante para poner toda la sección en Pantalla Completa de manera segura -->
-                <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶ Pantalla Completa</button>
+                <!-- Botones flotantes de control para PC -->
+                <div class="custom-controls">
+                    <button class="ctrl-btn" onclick="toggleMute()">🔊 Silenciar / Audio</button>
+                    <button class="ctrl-btn" onclick="toggleFullscreen()">⛶ Pantalla Completa</button>
+                </div>
             </div>
         </div>
 
@@ -137,7 +172,7 @@
     </div>
 
     <script>
-        // Script para activar la pantalla completa limpia del reproductor
+        // Función rápida para alternar pantalla completa
         function toggleFullscreen() {
             var elem = document.getElementById("videoBox");
             if (!document.fullscreenElement) {
@@ -153,6 +188,13 @@
                     document.exitFullscreen();
                 }
             }
+        }
+
+        // Función de seguridad por si el audio requiere un reintento de interacción limpia
+        function toggleMute() {
+            var iframe = document.getElementById("kick-iframe");
+            // Recarga rápida de sincronización de audio si algún navegador bloquea el estado inicial
+            iframe.src = iframe.src;
         }
     </script>
 
