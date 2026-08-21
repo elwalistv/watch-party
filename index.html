@@ -17,7 +17,7 @@
         /* Estructura principal de la pantalla */
         .layout-container {
             display: grid;
-            grid-template-columns: 1fr 340px; /* Video a la izquierda, chat a la derecha */
+            grid-template-columns: 1fr 340px; /* Video a la izquierda, chat de Kick a la derecha */
             grid-template-rows: 1fr 60px;    /* Contenido arriba, barra de redes abajo */
             height: 100vh;
             width: 100vw;
@@ -37,7 +37,7 @@
             border: none;
         }
 
-        /* Contenedor del Chat (Lateral) */
+        /* Contenedor del Chat de Kick (Lateral) */
         .chat-section {
             grid-column: 2 / 3;
             grid-row: 1 / 2;
@@ -69,7 +69,7 @@
         }
 
         .social-links a {
-            color: #bf94ff;
+            color: #53fc18; /* Color verde característico de Kick */
             text-decoration: none;
             margin-left: 15px;
             font-weight: 600;
@@ -101,20 +101,21 @@
 
     <div class="layout-container">
         
-        <!-- ZONA DEL VIDEO / STREAM -->
+        <!-- ZONA DEL VIDEO / STREAM DE KICK -->
         <div class="video-section">
-            <!-- Reemplaza el src con tu reproductor de video oficial -->
+            <!-- REEMPLAZA "tu_usuario" con el nombre de tu canal en Kick -->
             <iframe 
-                src="https://www.youtube.com/embed/TU_ID_DE_VIDEO" 
-                allowfullscreen>
+                src="https://player.kick.com/tu_usuario" 
+                allowfullscreen="true" 
+                scrolling="no">
             </iframe>
         </div>
 
-        <!-- ZONA DEL CHAT (Lateral) -->
+        <!-- ZONA DEL CHAT DE KICK (Lateral) -->
         <div class="chat-section">
-            <!-- Reemplaza el src con el chat incrustado de tu plataforma -->
+            <!-- REEMPLAZA "tu_usuario" con el nombre de tu canal en Kick -->
             <iframe 
-                src="https://www.youtube.com/live_chat?v=TU_ID_DE_VIDEO&embed_domain=elwalis.com">
+                src="https://kick.com/tu_usuario/chatroom">
             </iframe>
         </div>
 
@@ -124,8 +125,8 @@
                 <h1>EL WALIS - Watch Party de Anime 🍿</h1>
             </div>
             <div class="social-links">
+                <a href="https://kick.com/tu_usuario" target="_blank">Kick</a>
                 <a href="https://instagram.com/tu_usuario" target="_blank">Instagram</a>
-                <a href="https://twitter.com/tu_usuario" target="_blank">Twitter / X</a>
                 <a href="https://discord.gg/tu_servidor" target="_blank">Discord</a>
             </div>
         </div>
