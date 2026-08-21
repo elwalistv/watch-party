@@ -19,7 +19,7 @@
             overflow: hidden;
         }
 
-        /* Estructura general idéntica a Jivencio */
+        /* Estructura general idéntica */
         .jivencio-layout {
             display: grid;
             grid-template-columns: 1fr 340px;
@@ -36,7 +36,6 @@
             height: 100%;
         }
 
-        /* Contenedor del video principal */
         .video-container {
             position: relative;
             width: 100%;
@@ -56,7 +55,7 @@
             border: 0;
         }
 
-        /* Escudos antirredirección en PC */
+        /* Escudos antirredirección */
         .blocker-top {
             position: absolute;
             top: 0;
@@ -90,7 +89,6 @@
             pointer-events: auto;
         }
 
-        /* Controles flotantes de audio y pantalla completa */
         .custom-controls {
             position: absolute;
             bottom: 12px;
@@ -118,7 +116,7 @@
             background: rgba(40, 40, 40, 0.95);
         }
 
-        /* Barra inferior de botones (Estilo Jivencio) */
+        /* Barra inferior de botones */
         .bottom-bar {
             display: flex;
             gap: 12px;
@@ -153,7 +151,6 @@
         .btn-patreon { background-color: #ff424d; }
         .btn-sub { background-color: #9146ff; }
 
-        /* Columna derecha: El chat oficial */
         .chat-container {
             background-color: #141416;
             border-radius: 16px;
@@ -170,9 +167,9 @@
             background-color: #141416;
         }
 
-        /* PANTALLA DE ERROR Falsa (Estilo idéntico a ERR_CONNECTION_TIMED_OUT de Chrome) */
+        /* PANTALLA DE ERROR IDÉNTICA A CHROME (Alineación exacta a la referencia) */
         #offline-screen {
-            display: none; /* Oculto por defecto mientras transmite */
+            display: none; /* Oculto por defecto */
             position: fixed;
             top: 0;
             left: 0;
@@ -181,23 +178,27 @@
             background-color: #ffffff;
             color: #202124;
             z-index: 9999;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: flex-start;
-            padding-left: 15%;
+            padding: 100px 0 0 15%; /* Margen izquierdo y superior exacto de Chrome */
             box-sizing: border-box;
         }
 
         .err-icon {
-            font-size: 48px;
-            margin-bottom: 20px;
+            width: 32px;
+            height: 38px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="38"><path fill="%23757575" d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>');
+            background-repeat: no-repeat;
+            margin-bottom: 24px;
         }
 
         .err-title {
             font-size: 24px;
             font-weight: 400;
-            margin-bottom: 10px;
+            color: #202124;
+            margin-bottom: 12px;
         }
 
         .err-url {
@@ -206,38 +207,57 @@
         }
 
         .err-desc {
-            font-size: 14px;
+            font-size: 13px;
             color: #5f6368;
-            margin-top: 15px;
-            line-height: 1.5;
+            margin-top: 14px;
+            line-height: 1.6;
         }
 
         .err-desc ul {
-            margin: 5px 0 15px 20px;
+            margin: 4px 0 12px 18px;
             padding: 0;
         }
 
         .err-code {
-            font-size: 12px;
+            font-size: 11px;
             color: #5f6368;
-            margin-top: 20px;
+            margin-top: 18px;
+        }
+
+        .err-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            align-items: center;
         }
 
         .err-btn {
             background-color: #1a73e8;
             color: white;
             border: none;
-            padding: 10px 24px;
+            padding: 8px 22px;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 1px 2px rgba(0,66,128,0.3);
         }
 
         .err-btn:hover {
             background-color: #1b66c9;
+        }
+
+        .err-details-btn {
+            background: transparent;
+            color: #1a73e8;
+            border: 1px solid #dadce0;
+            padding: 7px 18px;
+            border-radius: 16px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .err-details-btn:hover {
+            background-color: rgba(26, 115, 232, 0.04);
         }
 
         @media (max-width: 1024px) {
@@ -253,9 +273,9 @@
 </head>
 <body>
 
-    <!-- PANTALLA DE ERROR OCULTA QUE APARECE AL FINALIZAR LA TRANSMISIÓN -->
+    <!-- PANTALLA DE ERROR IDÉNTICA A LA CAPTURA -->
     <div id="offline-screen">
-        <div class="err-icon">📄</div>
+        <div class="err-icon"></div>
         <div class="err-title">No se puede acceder a este sitio web</div>
         <div><span id="current-domain" class="err-url">watch.jivensensei.com</span> ha tardado demasiado en responder.</div>
         <div class="err-desc">
@@ -267,16 +287,19 @@
             </ul>
         </div>
         <div class="err-code">ERR_CONNECTION_TIMED_OUT</div>
-        <button class="err-btn" onclick="location.reload()">Volver a cargar</button>
+        <div class="err-actions">
+            <button class="err-btn" onclick="location.reload()">Volver a cargar</button>
+            <button class="err-details-btn">Detalles</button>
+        </div>
     </div>
 
     <div class="jivencio-layout">
         
-        <!-- SECCIÓN IZQUIERDA (Video + Barra inferior) -->
+        <!-- SECCIÓN IZQUIERDA -->
         <div class="left-column">
             
             <div class="video-container" id="videoBox">
-                <!-- REEMPLAZA "eltopo12345" POR TU NOMBRE DE USUARIO REAL DE KICK -->
+                <!-- REEMPLAZA "eltopo12345" POR TU USUARIO REAL DE KICK -->
                 <iframe 
                     id="kick-iframe"
                     src="https://player.kick.com/eltopo12345?autoplay=true&muted=false" 
@@ -284,19 +307,17 @@
                     allowfullscreen>
                 </iframe>
                 
-                <!-- Escudos antirredirección -->
                 <div class="blocker-top"></div>
                 <div class="blocker-bottom-right"></div>
                 <div class="blocker-bottom-left"></div>
 
-                <!-- Controles flotantes de audio y pantalla completa -->
                 <div class="custom-controls">
                     <button class="ctrl-btn" onclick="toggleMute()">🔊 Audio</button>
                     <button class="ctrl-btn" onclick="toggleFullscreen()">⛶ Pantalla Completa</button>
                 </div>
             </div>
 
-            <!-- BARRA INFERIOR DE BOTONES (Estilo Jivencio) -->
+            <!-- BARRA INFERIOR -->
             <div class="bottom-bar">
                 <a href="https://youtube.com" target="_blank" class="nav-btn btn-youtube">YouTube</a>
                 <a href="https://kick.com/eltopo12345" target="_blank" class="nav-btn btn-kick">Kick</a>
@@ -314,10 +335,8 @@
     </div>
 
     <script>
-        // Muestra automáticamente el dominio actual en el texto del error
         document.getElementById('current-domain').innerText = window.location.hostname;
 
-        // Función de pantalla completa
         function toggleFullscreen() {
             var elem = document.getElementById("videoBox");
             if (!document.fullscreenElement) {
@@ -335,17 +354,14 @@
             }
         }
 
-        // Función de sincronización de audio
         function toggleMute() {
             var iframe = document.getElementById("kick-iframe");
             iframe.src = iframe.src;
         }
 
-        // SIMULACIÓN INTELIGENTE DE FIN DE TRANSMISIÓN:
-        // Puedes activar la pantalla de error presionando la tecla "F8" en tu teclado, 
-        // o programar una comprobación automática del estado de tu stream.
+        // Presiona la tecla "F8" en tu teclado para activar o desactivar esta pantalla de error de inmediato
         window.addEventListener('keydown', function(e) {
-            if (e.key === 'F8') { // Presiona F8 para simular que terminó el directo
+            if (e.key === 'F8') {
                 var screen = document.getElementById('offline-screen');
                 screen.style.display = (screen.style.display === 'flex') ? 'none' : 'flex';
             }
