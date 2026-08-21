@@ -5,41 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Walis - Live Watch Party</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body, html { 
-            margin: 0; padding: 0; height: 100%; 
-            overflow: hidden; background-color: #121212; 
+            height: 100%; 
+            background-color: #0e0e10; 
+            font-family: Inter, Helvetica, sans-serif; 
+            color: #efeff1;
+            overflow: hidden;
         }
-        #video-container { 
-            width: 100%; height: 100%; position: relative; 
+
+        /* Estructura principal de la pantalla */
+        .layout-container {
+            display: grid;
+            grid-template-columns: 1fr 340px; /* Video a la izquierda, chat a la derecha */
+            grid-template-rows: 1fr 60px;    /* Contenido arriba, barra de redes abajo */
+            height: 100vh;
+            width: 100vw;
         }
-        iframe { 
-            width: 100%; height: 100%; border: none; 
-            position: absolute; top: 0; left: 0; z-index: 5;
+
+        /* Contenedor del Video */
+        .video-section {
+            grid-column: 1 / 2;
+            grid-row: 1 / 2;
+            background-color: #000;
+            position: relative;
         }
-        #error-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #f1f1f1; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; font-family: sans-serif;
-            z-index: 1;
+
+        .video-section iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Contenedor del Chat (Lateral) */
+        .chat-section {
+            grid-column: 2 / 3;
+            grid-row: 1 / 2;
+            background-color: #18181b;
+            border-left: 1px solid #2f2f35;
+        }
+
+        .chat-section iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Barra de Redes Sociales / Inferior */
+        .footer-bar {
+            grid-column: 1 / 3;
+            grid-row: 2 / 3;
+            background-color: #18181b;
+            border-top: 1px solid #2f2f35;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .channel-info h1 {
+            font-size: 16px;
+            color: #ffffff;
+        }
+
+        .social-links a {
+            color: #bf94ff;
+            text-decoration: none;
+            margin-left: 15px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .social-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Adaptación para pantallas pequeñas */
+        @media (max-width: 900px) {
+            .layout-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 300px 60px;
+            }
+            .chat-section {
+                grid-column: 1 / 2;
+                grid-row: 2 / 3;
+            }
+            .footer-bar {
+                grid-column: 1 / 2;
+                grid-row: 3 / 4;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div id="video-container">
-        <!-- PANTALLA DE ERROR FALSA -->
-        <div id="error-screen">
-            <h1 style="color: #333; margin-bottom: 5px;">⚠️ Error de conexión</h1>
-            <p style="color: #666;">La página <b>rumble.com</b> ha rechazado la conexión.</p>
+    <div class="layout-container">
+        
+        <!-- ZONA DEL VIDEO / STREAM -->
+        <div class="video-section">
+            <!-- Reemplaza el src con tu reproductor de video oficial -->
+            <iframe 
+                src="https://www.youtube.com/embed/TU_ID_DE_VIDEO" 
+                allowfullscreen>
+            </iframe>
         </div>
 
-        <!-- REPRODUCTOR OFICIAL DE RUMBLE -->
-        <iframe 
-            src="https://rumble.com/embed/v7c9wt8/?pub=4qc3vo&start=113" 
-            allowfullscreen 
-            scrolling="no" 
-            frameborder="0">
-        </iframe>
+        <!-- ZONA DEL CHAT (Lateral) -->
+        <div class="chat-section">
+            <!-- Reemplaza el src con el chat incrustado de tu plataforma -->
+            <iframe 
+                src="https://www.youtube.com/live_chat?v=TU_ID_DE_VIDEO&embed_domain=elwalis.com">
+            </iframe>
+        </div>
+
+        <!-- BARRA INFERIOR (Redes y Nombre) -->
+        <div class="footer-bar">
+            <div class="channel-info">
+                <h1>EL WALIS - Watch Party de Anime 🍿</h1>
+            </div>
+            <div class="social-links">
+                <a href="https://instagram.com/tu_usuario" target="_blank">Instagram</a>
+                <a href="https://twitter.com/tu_usuario" target="_blank">Twitter / X</a>
+                <a href="https://discord.gg/tu_servidor" target="_blank">Discord</a>
+            </div>
+        </div>
+
     </div>
 
 </body>
