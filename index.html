@@ -1,105 +1,31 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watch Party ElWalis</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
+<div class="video-container">
+  <iframe 
+    src="https://www.youtube-nocookie.com/embed/eUlnicOwdc4?autoplay=1&controls=1&modestbranding=1&rel=0&iv_load_policy=3" 
+    title="Watch Party" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+    allowfullscreen>
+  </iframe>
+</div>
 
-        /* Contenedor seguro con proporción 16:9 */
-        .video-container {
-            position: relative;
-            width: 100%;
-            max-width: 1280px;
-            aspect-ratio: 16 / 9;
-            background-color: #000;
-            overflow: hidden;
-            border-radius: 12px;
-        }
-
-        /* Estilo para recortar los bordes y ocultar títulos de YouTube */
-        #yt-player {
-            position: absolute;
-            top: -5%;
-            left: 0;
-            width: 100%;
-            height: 110%;
-            border: none;
-        }
-
-        /* Capa invisible para bloquear el mouse y evitar que aparezcan controles o enlaces */
-        .mouse-blocker {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            z-index: 10;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="video-container">
-        <!-- El div que la API reemplazará con el reproductor -->
-        <div id="yt-player"></div>
-        <div class="mouse-blocker"></div>
-    </div>
-
-    <script>
-        var myVideoId = 'eUlnicOwdc4'; 
-
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        var player;
-
-        function onYouTubeIframeApiReady() {
-            player = new YT.Player('yt-player', {
-                height: '100%', // Obligatorio para que la API pinte el video
-                width: '100%',  // Obligatorio para que la API pinte el video
-                videoId: myVideoId,
-                playerVars: {
-                    'autoplay': 1,
-                    'controls': 0,
-                    'showinfo': 0,
-                    'modestbranding': 1,
-                    'rel': 0,
-                    'loop': 1,
-                    'playlist': myVideoId,
-                    'iv_load_policy': 3
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            event.target.mute(); // Necesario para el arranque automático sin bloqueos del navegador
-            event.target.playVideo();
-        }
-
-        function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.ENDED) {
-                player.playVideo();
-            }
-        }
-    </script>
-
-</body>
-</html>
+<style>
+  .video-container {
+    position: relative;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-bottom: 56.25%; /* Relación de aspecto 16:9 perfecta */
+    height: 0;
+    background-color: #000; /* Fondo negro para evitar destellos blancos al cargar */
+    overflow: hidden;
+    border-radius: 12px;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>
