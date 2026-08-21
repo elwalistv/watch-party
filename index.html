@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Watch Party - ElWalis</title>
     <style>
-        /* Diseño general de la página estilo plataforma de streaming */
         body {
             margin: 0;
             padding: 20px;
@@ -19,10 +18,9 @@
             box-sizing: border-box;
         }
 
-        /* Contenedor principal de dos columnas (Video/Redes a la izquierda, Chat a la derecha) */
         .main-layout {
             display: grid;
-            grid-template-columns: 1fr 340px; /* Columna izquierda flexible, columna derecha fija de 340px para el chat */
+            grid-template-columns: 1fr 340px;
             gap: 20px;
             width: 100%;
             max-width: 1600px;
@@ -30,7 +28,6 @@
             max-height: 900px;
         }
 
-        /* Columna izquierda: Contenedor del video + barra inferior de redes */
         .left-column {
             display: flex;
             flex-direction: column;
@@ -38,19 +35,17 @@
             height: 100%;
         }
 
-        /* Contenedor del reproductor con zoom para ocultar logos de Kick */
         .video-container {
             position: relative;
             width: 100%;
-            flex-grow: 1; /* Ocupa el espacio disponible */
+            flex-grow: 1;
             aspect-ratio: 16 / 9;
             background-color: #000000;
-            overflow: hidden; /* Corta los elementos flotantes de Kick */
+            overflow: hidden;
             border-radius: 12px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
         }
 
-        /* El iframe de Kick ampliado para recortar marcas de agua y títulos */
         .video-container iframe {
             position: absolute;
             top: -2.5%;
@@ -60,7 +55,6 @@
             border: 0;
         }
 
-        /* Escudo invisible para evitar clics y redirecciones a Kick */
         .mouse-blocker {
             position: absolute;
             top: 0;
@@ -69,10 +63,9 @@
             height: 100%;
             background: transparent;
             z-index: 10;
-            pointer-events: auto; /* Bloquea totalmente la interacción */
+            pointer-events: auto;
         }
 
-        /* Barra inferior de redes sociales (Estilo Jivencio) */
         .social-bar {
             display: flex;
             gap: 15px;
@@ -104,7 +97,7 @@
             background-color: #3f3f46;
         }
 
-        /* Columna derecha: El chat oficial de Kick integrado */
+        /* Columna derecha optimizada para el chat */
         .chat-container {
             width: 100%;
             height: 100%;
@@ -113,15 +106,17 @@
             overflow: hidden;
             border: 1px solid #27272a;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
         }
 
         .chat-container iframe {
             width: 100%;
             height: 100%;
             border: 0;
+            background-color: #161618;
         }
 
-        /* Diseño adaptable para celulares (Responsive) */
         @media (max-width: 1024px) {
             .main-layout {
                 grid-template-columns: 1fr;
@@ -139,33 +134,29 @@
         
         <!-- SECCIÓN IZQUIERDA: Reproductor y Redes -->
         <div class="left-column">
-            
             <div class="video-container">
-                <!-- CAMBIA "eltopo12345" POR TU NOMBRE DE USUARIO REAL EN KICK -->
+                <!-- REEMPLAZA "eltopo12345" POR TU CANAL DE KICK -->
                 <iframe 
                     src="https://player.kick.com/eltopo12345?autoplay=true&muted=false" 
                     title="Watch Party Stream" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                     allowfullscreen>
                 </iframe>
-                <!-- Escudo contra redirecciones -->
                 <div class="mouse-blocker"></div>
             </div>
 
-            <!-- BARRA DE REDES INFERIOR (Estilo Jivencio) -->
             <div class="social-bar">
                 <span>REDES:</span>
                 <a href="https://kick.com/eltopo12345" target="_blank" class="social-btn">Kick</a>
                 <a href="https://twitter.com/TuUsuario" target="_blank" class="social-btn">Twitter / X</a>
                 <a href="https://discord.gg/TuDiscord" target="_blank" class="social-btn">Discord</a>
             </div>
-
         </div>
 
-        <!-- SECCIÓN DERECHA: El Chat de Kick -->
+        <!-- SECCIÓN DERECHA: Chat con el formato correcto de ventana emergente -->
         <div class="chat-container">
-            <!-- CAMBIA "eltopo12345" AQUÍ TAMBIÉN PARA EL CHAT -->
-            <iframe src="https://kick.com/eltopo12345/chatroom" title="Chat de Kick"></iframe>
+            <!-- Usamos la ruta de chat flotante/emergente para evitar el bloqueo de pantalla en negro -->
+            <iframe src="https://kick.com/popout/eltopo12345/chat" title="Chat de Kick"></iframe>
         </div>
 
     </div>
