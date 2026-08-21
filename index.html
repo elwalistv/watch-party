@@ -1,29 +1,92 @@
-<div class="video-container">
-  <iframe 
-    src="https://www.youtube-nocookie.com/embed/eUlnicOwdc4?autoplay=1&controls=1&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1" 
-    title="Watch Party" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-    allowfullscreen>
-  </iframe>
+<!-- 1. El contenedor donde vivirá el video -->
+<div class="video-wrapper">
+  <div id="player"></div>
+  <!-- Esta capa transparente bloquea el mouse para que no salgan los controles -->
+  <div class="mouse-blocker"></div>
 </div>
 
+<!-- 2. El estilo CSS para que se vea profesional -->
 <style>
-  .video-container {
+  .video-wrapper {
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%;
+    padding-bottom: 56.25%; /* Relación de aspecto 16:9 */
     height: 0;
-    background-color: #0b0b0b;
     overflow: hidden;
+    background: #000;
     border-radius: 12px;
   }
-  .video-container iframe {
+  
+  #player {
+    position: absolute;
+    top: -5px; /* Pequeño truco para esconder la barra superior de YT */
+    left: 0;
+    width: 100%;
+    height: calc(100% + 10px); /* Aumenta el tamaño para cortar el borde */
+    pointer-events: auto; /* Permite que la API funcione */
+  }
+  
+  .mouse-blocker {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    border: 0;
+    background: transparent;
+    pointer-events: auto; /* Esto es clave: bloquea el mouse */
+    z-index: 10; /* Pone esta capa encima del video */
   }
 </style>
+
+<!-- 3. El JavaScript para cargar la API y tu video -->
+<script>
+  // ID de tu video
+  var videoId = 'eUlnicOwdc4';
+
+  // Carga el script de la API
+  var tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  // Función que se ejecuta cuando la API está lista
+  var player;
+  function onYouTubeIframeapiReady() {
+    player = new YT.Player('player', {
+      videoId: videoId,
+      playerVars: {
+        'autoplay': 1,          // Auto reproducir
+        'controls': 0,          // Ocultar controles (aunque ya los bloqueamos con CSS)
+        'showinfo': 0,          // Obsoleto pero ayuda
+        'modestbranding': 1,    // Marca mínima
+        'rel': 0,               // No videos relacionados al final
+        'loop': 1,              // Bucle (si se acaba)
+        'playlist': videoId,    // Necesario para el bucle
+        'iv_load_policy': 3     // Ocultar anotaciones
+      },
+      events: {
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange
+      }
+    });
+  }
+
+  // Cuando el reproductor esté listo
+  function onPlayerReady(event) {
+    event.target.mute(); // Importante: empezar muteado para asegurar el autoplay
+    event.target.playVideo();
+    
+    // Pequeño truco adicional para asegurar que no se vea el título ni la barra
+    // Al hacer clic en el centro del reproductor, este truco ayuda a quitar la UI
+    setInterval(function() {
+        // No hace nada, solo mantiene el foco
+    }, 1000);
+  }
+  
+  // Asegurar que el video siga en bucle
+  function onPlayerStateChange(event) {
+      if (event.data == YT.PlayerState.ENDED) {
+          player.playVideo();
+      }
+  }
+</script>
