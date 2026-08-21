@@ -17,7 +17,7 @@
             font-family: sans-serif;
         }
 
-        /* Contenedor principal que mantiene proporción y permite ocultar elementos de Kick */
+        /* Contenedor principal en cuadrícula (Video a la izquierda, Chat a la derecha) */
         .wrapper {
             display: grid;
             grid-template-columns: 1fr 340px;
@@ -30,18 +30,20 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            position: relative;
         }
 
+        /* Contenedor del video donde aplicamos el recorte de logos */
         .video-container {
             position: relative;
             width: 100%;
             flex-grow: 1;
             background: #000;
             border-radius: 12px;
-            overflow: hidden; /* CORTA LOS ELEMENTOS DE KICK */
+            overflow: hidden; /* Oculta el logo de Kick y el botón de HD exterior */
         }
 
-        /* Zoom para que los logos y botones de Kick queden fuera del cuadro */
+        /* Zoom ligero para cortar los bordes no deseados */
         #kick-iframe {
             position: absolute;
             top: -2%;
@@ -51,19 +53,42 @@
             border: 0;
         }
 
-        /* Capa invisible que bloquea el clic hacia la web de Kick */
-        .mouse-blocker {
+        /* BLOQUEO PARCIAL: Solo cubre la parte superior para evitar que abran el perfil o links, 
+           pero deja libre la esquina inferior para que funcionen el volumen y los controles de Kick */
+        .mouse-blocker-top {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            height: 85%; /* Deja libre el 15% inferior para el volumen */
             background: transparent;
             z-index: 5;
             pointer-events: auto;
         }
 
-        /* Contenedor del Chat */
+        /* Botón flotante personalizado de Pantalla Completa */
+        .fullscreen-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.75);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            z-index: 20;
+            backdrop-filter: blur(4px);
+            transition: background 0.2s;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(40, 40, 40, 0.9);
+        }
+
+        /* Contenedor del Chat a la derecha */
         .chat-container {
             background: #111;
             border-radius: 12px;
@@ -76,7 +101,7 @@
             border: 0;
         }
 
-        /* Diseño responsivo */
+        /* Diseño responsivo para celulares */
         @media (max-width: 900px) {
             .wrapper { grid-template-columns: 1fr; }
         }
@@ -85,24 +110,51 @@
 <body>
 
     <div class="wrapper">
+        <!-- Columna Izquierda: Video + Pantalla Completa flotante -->
         <div class="left-column">
             <div class="video-container" id="videoBox">
-                <!-- REEMPLAZA eltopo12345 por tu usuario -->
+                <!-- REEMPLAZA "eltopo12345" POR TU USUARIO REAL DE KICK -->
                 <iframe 
                     id="kick-iframe"
                     src="https://player.kick.com/eltopo12345?autoplay=true&muted=false" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                     allowfullscreen>
                 </iframe>
-                <!-- Escudo invisible para evitar redirecciones -->
-                <div class="mouse-blocker"></div>
+                
+                <!-- Escudo superior para evitar clics en enlaces o nombres, dejando libre abajo para el volumen -->
+                <div class="mouse-blocker-top"></div>
+
+                <!-- Botón flotante para poner toda la sección en Pantalla Completa de manera segura -->
+                <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶ Pantalla Completa</button>
             </div>
         </div>
 
+        <!-- Columna Derecha: Chat oficial de Kick en modo Popout -->
         <div class="chat-container">
+            <!-- REEMPLAZA "eltopo12345" AQUÍ TAMBIÉN -->
             <iframe id="chat-iframe" src="https://kick.com/popout/eltopo12345/chat"></iframe>
         </div>
     </div>
+
+    <script>
+        // Script para activar la pantalla completa limpia del reproductor
+        function toggleFullscreen() {
+            var elem = document.getElementById("videoBox");
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
 
 </body>
 </html>
