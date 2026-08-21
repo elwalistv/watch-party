@@ -76,7 +76,7 @@
       background-color: #09090b;
       z-index: 9999;
     }
-    /* Recorte reforzado para ocultar la barra superior de Kick en PC y móviles */
+    /* Recorte para ocultar el nombre y bloqueo absoluto de clics en el video */
     .player-wrapper {
       position: relative;
       width: 100%;
@@ -90,6 +90,8 @@
       width: 100%;
       height: calc(100% + 65px);
       border: 0;
+      /* ESTO BLOQUEA CUALQUIER CLIC O INTENTO DE SALIR A KICK DESDE EL REPRODUCTOR */
+      pointer-events: none; 
     }
   </style>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -138,10 +140,6 @@
           
           <div class="player-wrapper">
             <iframe src="https://player.kick.com/eltopo12345" allowfullscreen></iframe>
-            
-            <!-- CAPAS TOTALES DE BLOQUEO (Cubre todo el borde superior e inferior para evitar redirecciones) -->
-            <div class="absolute top-0 left-0 w-full h-20 bg-transparent z-30 pointer-events-auto"></div>
-            <div class="absolute bottom-0 right-0 w-full h-24 bg-transparent z-30 pointer-events-auto"></div>
           </div>
 
         </main>
@@ -154,7 +152,7 @@
     </div>
   </div>
 
-  <!-- SCRIPT DE DETECCIÓN Y FORZADO DE ESTADO -->
+  <!-- SCRIPT DE DETECCIÓN -->
   <script>
     document.getElementById('current-domain').innerText = window.location.hostname;
 
