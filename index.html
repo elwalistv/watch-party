@@ -7,43 +7,46 @@
     <style>
         body {
             margin: 0;
-            padding: 0;
-            background-color: #000;
+            padding: 15px;
+            background-color: #0b0b0b;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            box-sizing: border-box;
             overflow: hidden;
-            font-family: sans-serif;
         }
 
-        /* Contenedor principal en cuadrícula (Video a la izquierda, Chat a la derecha) */
-        .wrapper {
+        /* Estructura general idéntica a Jivencio */
+        .jivencio-layout {
             display: grid;
             grid-template-columns: 1fr 340px;
             gap: 15px;
-            width: 95vw;
-            height: 90vh;
+            width: 100%;
+            max-width: 1600px;
+            height: 95vh;
         }
 
         .left-column {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            position: relative;
+            gap: 12px;
+            height: 100%;
         }
 
-        /* Contenedor del video donde aplicamos el recorte de logos */
+        /* Contenedor del video principal */
         .video-container {
             position: relative;
             width: 100%;
             flex-grow: 1;
-            background: #000;
-            border-radius: 12px;
-            overflow: hidden; /* Oculta el logo de Kick y los botones externos */
+            background-color: #000000;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
-        /* Zoom ligero para cortar los bordes no deseados */
         #kick-iframe {
             position: absolute;
             top: -2%;
@@ -53,8 +56,7 @@
             border: 0;
         }
 
-        /* ESCUDOS ANTIRREDIRECCIÓN ESTRATÉGICOS PARA PC */
-        /* Bloquea toda la parte superior (logos y nombres de Kick) */
+        /* Escudos antirredirección en PC */
         .blocker-top {
             position: absolute;
             top: 0;
@@ -66,7 +68,6 @@
             pointer-events: auto;
         }
 
-        /* Bloquea solo la parte derecha de la barra inferior (evita el botón de "Visit Kick for HD") */
         .blocker-bottom-right {
             position: absolute;
             bottom: 0;
@@ -78,7 +79,6 @@
             pointer-events: auto;
         }
 
-        /* Bloquea la parte izquierda extrema inferior, dejando libre únicamente el área del volumen */
         .blocker-bottom-left {
             position: absolute;
             bottom: 0;
@@ -90,7 +90,7 @@
             pointer-events: auto;
         }
 
-        /* Barra de controles flotante personalizada (Volumen rápido y Pantalla Completa) */
+        /* Controles flotantes de audio y pantalla completa */
         .custom-controls {
             position: absolute;
             bottom: 12px;
@@ -102,7 +102,7 @@
         }
 
         .ctrl-btn {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.75);
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 6px 12px;
@@ -118,32 +118,165 @@
             background: rgba(40, 40, 40, 0.95);
         }
 
-        /* Contenedor del Chat a la derecha */
-        .chat-container {
-            background: #111;
+        /* Barra inferior de botones (Estilo Jivencio) */
+        .bottom-bar {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            background-color: #141416;
             border-radius: 12px;
-            overflow: hidden;
+            border: 1px solid #222226;
         }
 
-        #chat-iframe {
+        .nav-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        .nav-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-youtube { background-color: #ff0000; }
+        .btn-kick { background-color: #53fc18; color: #000; }
+        .btn-patreon { background-color: #ff424d; }
+        .btn-sub { background-color: #9146ff; }
+
+        /* Columna derecha: El chat oficial */
+        .chat-container {
+            background-color: #141416;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #222226;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            height: 100%;
+        }
+
+        .chat-container iframe {
             width: 100%;
             height: 100%;
             border: 0;
+            background-color: #141416;
         }
 
-        /* Diseño responsivo para celulares */
-        @media (max-width: 900px) {
-            .wrapper { grid-template-columns: 1fr; }
+        /* PANTALLA DE ERROR Falsa (Estilo idéntico a ERR_CONNECTION_TIMED_OUT de Chrome) */
+        #offline-screen {
+            display: none; /* Oculto por defecto mientras transmite */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+            color: #202124;
+            z-index: 9999;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding-left: 15%;
+            box-sizing: border-box;
+        }
+
+        .err-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .err-title {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .err-url {
+            font-weight: bold;
+            color: #202124;
+        }
+
+        .err-desc {
+            font-size: 14px;
+            color: #5f6368;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+
+        .err-desc ul {
+            margin: 5px 0 15px 20px;
+            padding: 0;
+        }
+
+        .err-code {
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 20px;
+        }
+
+        .err-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 1px 2px rgba(0,66,128,0.3);
+        }
+
+        .err-btn:hover {
+            background-color: #1b66c9;
+        }
+
+        @media (max-width: 1024px) {
+            .jivencio-layout {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            .chat-container {
+                height: 500px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="wrapper">
-        <!-- Columna Izquierda: Video + Controles flotantes -->
+    <!-- PANTALLA DE ERROR OCULTA QUE APARECE AL FINALIZAR LA TRANSMISIÓN -->
+    <div id="offline-screen">
+        <div class="err-icon">📄</div>
+        <div class="err-title">No se puede acceder a este sitio web</div>
+        <div><span id="current-domain" class="err-url">watch.jivensensei.com</span> ha tardado demasiado en responder.</div>
+        <div class="err-desc">
+            Prueba a:
+            <ul>
+                <li>Comprobar la conexión</li>
+                <li>Comprobar el proxy y el cortafuegos</li>
+                <li>Ejecutar Diagnósticos de red de Windows</li>
+            </ul>
+        </div>
+        <div class="err-code">ERR_CONNECTION_TIMED_OUT</div>
+        <button class="err-btn" onclick="location.reload()">Volver a cargar</button>
+    </div>
+
+    <div class="jivencio-layout">
+        
+        <!-- SECCIÓN IZQUIERDA (Video + Barra inferior) -->
         <div class="left-column">
+            
             <div class="video-container" id="videoBox">
-                <!-- REEMPLAZA "eltopo12345" POR TU USUARIO REAL DE KICK -->
+                <!-- REEMPLAZA "eltopo12345" POR TU NOMBRE DE USUARIO REAL DE KICK -->
                 <iframe 
                     id="kick-iframe"
                     src="https://player.kick.com/eltopo12345?autoplay=true&muted=false" 
@@ -151,28 +284,40 @@
                     allowfullscreen>
                 </iframe>
                 
-                <!-- Escudos que evitan redirecciones pero dejan libre la zona de audio -->
+                <!-- Escudos antirredirección -->
                 <div class="blocker-top"></div>
                 <div class="blocker-bottom-right"></div>
                 <div class="blocker-bottom-left"></div>
 
-                <!-- Botones flotantes de control para PC -->
+                <!-- Controles flotantes de audio y pantalla completa -->
                 <div class="custom-controls">
-                    <button class="ctrl-btn" onclick="toggleMute()">🔊 Silenciar / Audio</button>
+                    <button class="ctrl-btn" onclick="toggleMute()">🔊 Audio</button>
                     <button class="ctrl-btn" onclick="toggleFullscreen()">⛶ Pantalla Completa</button>
                 </div>
             </div>
+
+            <!-- BARRA INFERIOR DE BOTONES (Estilo Jivencio) -->
+            <div class="bottom-bar">
+                <a href="https://youtube.com" target="_blank" class="nav-btn btn-youtube">YouTube</a>
+                <a href="https://kick.com/eltopo12345" target="_blank" class="nav-btn btn-kick">Kick</a>
+                <a href="https://patreon.com" target="_blank" class="nav-btn btn-patreon">Patreon</a>
+                <a href="https://kick.com/eltopo12345" target="_blank" class="nav-btn btn-sub">Suscribirse</a>
+            </div>
+
         </div>
 
-        <!-- Columna Derecha: Chat oficial de Kick en modo Popout -->
+        <!-- SECCIÓN DERECHA (Chat) -->
         <div class="chat-container">
-            <!-- REEMPLAZA "eltopo12345" AQUÍ TAMBIÉN -->
-            <iframe id="chat-iframe" src="https://kick.com/popout/eltopo12345/chat"></iframe>
+            <iframe src="https://kick.com/popout/eltopo12345/chat" title="Chat"></iframe>
         </div>
+
     </div>
 
     <script>
-        // Función rápida para alternar pantalla completa
+        // Muestra automáticamente el dominio actual en el texto del error
+        document.getElementById('current-domain').innerText = window.location.hostname;
+
+        // Función de pantalla completa
         function toggleFullscreen() {
             var elem = document.getElementById("videoBox");
             if (!document.fullscreenElement) {
@@ -190,12 +335,21 @@
             }
         }
 
-        // Función de seguridad por si el audio requiere un reintento de interacción limpia
+        // Función de sincronización de audio
         function toggleMute() {
             var iframe = document.getElementById("kick-iframe");
-            // Recarga rápida de sincronización de audio si algún navegador bloquea el estado inicial
             iframe.src = iframe.src;
         }
+
+        // SIMULACIÓN INTELIGENTE DE FIN DE TRANSMISIÓN:
+        // Puedes activar la pantalla de error presionando la tecla "F8" en tu teclado, 
+        // o programar una comprobación automática del estado de tu stream.
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'F8') { // Presiona F8 para simular que terminó el directo
+                var screen = document.getElementById('offline-screen');
+                screen.style.display = (screen.style.display === 'flex') ? 'none' : 'flex';
+            }
+        });
     </script>
 
 </body>
