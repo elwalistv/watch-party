@@ -3,134 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Walis - Live Watch Party</title>
+    <title>El Walis - Live</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
         body, html { 
+            margin: 0; 
+            padding: 0; 
             height: 100%; 
-            background-color: #0e0e10; 
-            font-family: Inter, Helvetica, sans-serif; 
-            color: #efeff1;
-            overflow: hidden;
+            overflow: hidden; 
+            background-color: #121212; 
         }
-
-        /* Estructura principal de la pantalla */
-        .layout-container {
-            display: grid;
-            grid-template-columns: 1fr 340px; /* Video a la izquierda, chat de Kick a la derecha */
-            grid-template-rows: 1fr 60px;    /* Contenido arriba, barra de redes abajo */
-            height: 100vh;
-            width: 100vw;
+        
+        #video-container { 
+            width: 100%; 
+            height: 100%; 
+            position: relative; 
         }
-
-        /* Contenedor del Video */
-        .video-section {
-            grid-column: 1 / 2;
-            grid-row: 1 / 2;
-            background-color: #000;
-            position: relative;
-        }
-
-        .video-section iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Contenedor del Chat de Kick (Lateral) */
-        .chat-section {
-            grid-column: 2 / 3;
-            grid-row: 1 / 2;
-            background-color: #18181b;
-            border-left: 1px solid #2f2f35;
-        }
-
-        .chat-section iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Barra de Redes Sociales / Inferior */
-        .footer-bar {
-            grid-column: 1 / 3;
-            grid-row: 2 / 3;
-            background-color: #18181b;
-            border-top: 1px solid #2f2f35;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-        }
-
-        .channel-info h1 {
-            font-size: 16px;
-            color: #ffffff;
-        }
-
-        .social-links a {
-            color: #53fc18; /* Color verde característico de Kick */
-            text-decoration: none;
-            margin-left: 15px;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .social-links a:hover {
-            text-decoration: underline;
-        }
-
-        /* Adaptación para pantallas pequeñas */
-        @media (max-width: 900px) {
-            .layout-container {
-                grid-template-columns: 1fr;
-                grid-template-rows: 1fr 300px 60px;
-            }
-            .chat-section {
-                grid-column: 1 / 2;
-                grid-row: 2 / 3;
-            }
-            .footer-bar {
-                grid-column: 1 / 2;
-                grid-row: 3 / 4;
-            }
+        
+        iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
         }
     </style>
 </head>
 <body>
 
-    <div class="layout-container">
-        
-        <!-- ZONA DEL VIDEO / STREAM DE KICK -->
-        <div class="video-section">
-            <!-- REEMPLAZA "tu_usuario" con el nombre de tu canal en Kick -->
-            <iframe 
-                src="https://player.kick.com/tu_usuario" 
-                allowfullscreen="true" 
-                scrolling="no">
-            </iframe>
-        </div>
-
-        <!-- ZONA DEL CHAT DE KICK (Lateral) -->
-        <div class="chat-section">
-            <!-- REEMPLAZA "tu_usuario" con el nombre de tu canal en Kick -->
-            <iframe 
-                src="https://kick.com/tu_usuario/chatroom">
-            </iframe>
-        </div>
-
-        <!-- BARRA INFERIOR (Redes y Nombre) -->
-        <div class="footer-bar">
-            <div class="channel-info">
-                <h1>EL WALIS - Watch Party de Anime 🍿</h1>
-            </div>
-            <div class="social-links">
-                <a href="https://kick.com/tu_usuario" target="_blank">Kick</a>
-                <a href="https://instagram.com/tu_usuario" target="_blank">Instagram</a>
-                <a href="https://discord.gg/tu_servidor" target="_blank">Discord</a>
-            </div>
-        </div>
-
+    <div id="video-container">
+        <!-- Reemplaza el enlace por el de tu plataforma -->
+        <iframe 
+            src="https://www.youtube.com/embed/TU_ID_DE_VIDEO" 
+            allowfullscreen 
+            scrolling="no" 
+            frameborder="0">
+        </iframe>
     </div>
 
 </body>
