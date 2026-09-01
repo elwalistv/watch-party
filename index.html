@@ -4,14 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>elwalis.com - Watch Party</title>
-    
-    <!-- 1. Estilos y librería de Video.js -->
-    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
-    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
 
-    <!-- 2. Amazon IVS Player Tech para Video.js -->
-    <script src="https://player.live-video.net/1.24.0/amazon-ivs-videojs-tech.min.js"></script>
+    <!-- 1. LIBRERÍA OFICIAL DE AMAZON IVS -->
+    <script src="https://player.live-video.net/1.24.0/amazon-ivs-player.min.js"></script>
 
+    <!-- 2. AQUÍ VAN TODOS LOS ESTILOS (CSS) -->
     <style>
         * {
             box-sizing: border-box;
@@ -28,6 +25,7 @@
             overflow: hidden;
         }
 
+        /* Banner Superior */
         .top-banner {
             background: #18181b;
             color: #fff;
@@ -35,7 +33,6 @@
             padding: 10px;
             font-weight: 800;
             font-size: 16px;
-            letter-spacing: 0.5px;
             border-bottom: 1px solid #2f2f35;
             display: flex;
             justify-content: center;
@@ -43,10 +40,9 @@
             gap: 15px;
             z-index: 30;
         }
-        .top-banner span {
-            color: #ff75e6;
-        }
+        .top-banner span { color: #ff75e6; }
 
+        /* Contenedor principal */
         .main-layout {
             display: grid;
             grid-template-columns: 1fr 340px;
@@ -55,6 +51,7 @@
             width: 100vw;
         }
 
+        /* Sección de Video */
         .video-section {
             position: relative;
             background: #000;
@@ -65,31 +62,17 @@
             height: 100%;
             overflow: hidden;
         }
-
-        /* Estilos para adaptar Video.js al diseño oscuro tipo streaming */
-        .video-js {
+        
+        #amazon-ivs-video {
             width: 100%;
             height: 100%;
-            background-color: #000;
-        }
-        .video-js .vjs-big-play-button {
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0,0,0,0.7);
-            border-color: #53fc18;
-            border-radius: 50%;
-            width.
-            height: 60px;
-            width: 60px;
-        }
-        .vjs-theme-city .vjs-control-bar {
-            background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+            object-fit: contain;
         }
 
+        /* Textos e información flotante */
         .video-overlay-bottom-left {
             position: absolute;
-            bottom: 60px;
+            bottom: 65px;
             left: 30px;
             color: #ff75e6;
             font-weight: 900;
@@ -100,9 +83,25 @@
             line-height: 1.2;
         }
 
+        .video-overlay-center {
+            position: absolute;
+            bottom: 65px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff9eee;
+            font-weight: 900;
+            font-size: 26px;
+            text-align: center;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+            pointer-events: none;
+            z-index: 5;
+            line-height: 1.2;
+        }
+
+        /* Cámara flotante */
         .floating-cam {
             position: absolute;
-            bottom: 60px;
+            bottom: 65px;
             right: 30px;
             width: 260px;
             aspect-ratio: 16/9;
@@ -124,6 +123,72 @@
             border-radius: 4px;
         }
 
+        /* Barra de controles sobre el video */
+        .video-custom-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 45px;
+            background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            z-index: 20;
+        }
+        .controls-left, .controls-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .ctrl-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            opacity: 0.85;
+            transition: opacity 0.2s;
+        }
+        .ctrl-btn:hover { opacity: 1; }
+
+        /* Menú desplegable flotante (Engranaje) */
+        .settings-menu {
+            position: absolute;
+            bottom: 50px;
+            right: 45px;
+            background: #18181b;
+            border: 1px solid #2f2f35;
+            border-radius: 8px;
+            width: 240px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+            display: none; /* Oculto por defecto */
+            z-index: 25;
+            overflow: hidden;
+        }
+        .settings-menu.active {
+            display: block; /* Se muestra al dar clic */
+        }
+        .settings-item {
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #efeff1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid #2f2f35;
+        }
+        .settings-item:hover { background: #2f2f35; }
+        .settings-item:last-child { border-bottom: none; }
+
+        /* Chat Lateral */
         .chat-section {
             background: #18181b;
             border-left: 1px solid #2f2f35;
@@ -151,6 +216,7 @@
             border: none;
         }
 
+        /* Botones del Footer */
         .footer-buttons-bar {
             height: 45px;
             background: #09090b;
@@ -176,9 +242,7 @@
             border: 1px solid #2f2f35;
             transition: background 0.2s;
         }
-        .btn-link:hover {
-            background: #2f2f35;
-        }
+        .btn-link:hover { background: #2f2f35; }
         .btn-youtube { background: #ff0000; border-color: #ff0000; }
         .btn-kick { background: #53fc18; color: #000; border-color: #53fc18; font-weight: 700; }
         .btn-patreon { background: #ff424d; border-color: #ff424d; }
@@ -188,38 +252,65 @@
                 grid-template-columns: 1fr;
                 grid-template-rows: 55vh 1fr;
             }
-            .floating-cam {
-                width: 130px;
-                bottom: 50px;
-                right: 15px;
-            }
+            .floating-cam { width: 130px; bottom: 50px; right: 15px; }
             .video-overlay-bottom-left { font-size: 14px; bottom: 50px; left: 15px; }
+            .video-overlay-center { font-size: 16px; bottom: 50px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Banner de Metas -->
     <div class="top-banner">
         <span>🎬</span> 12 SUBS KICK = VEMOS HOY MILES MORALES 1 0/12
     </div>
 
     <div class="main-layout">
         
+        <!-- SECCIÓN DE VIDEO Y CAPAS FLOTANTES -->
         <div class="video-section">
-            <!-- Reproductor Video.js configurado con soporte IVS -->
-            <video-js id="amazon-ivs-player" class="vjs-default-skin vjs-big-play-centered" controls preload="auto" playsinline>
-                <source src="https://7c37b557078d.us-east-1.playback.live-video.net/api/video/v1/us-east-1.885191629510.channel.LV8ooIxv5Uqu.m3u8" type="application/x-mpegURL" />
-            </video-js>
+            <video id="amazon-ivs-video" playsinline></video>
 
             <div class="video-overlay-bottom-left">
-                12 SUBS KICK = VEMOS HOY MILES MORALES 1 0/12
+                3 SUBS DE KICK = 1 CAP<br>
+                <span style="font-size: 16px; color: #fff;">0/9 SUBS = 0/3 CAPS</span>
+            </div>
+
+            <div class="video-overlay-center">
+                KIMETSU<br>TEMP 3<br>CAP 6/8
             </div>
 
             <div class="floating-cam">
                 <span>Tu Cámara</span>
             </div>
+
+            <!-- MENÚ FLOTANTE DEL ENGRANAJE -->
+            <div class="settings-menu" id="settingsMenu">
+                <div class="settings-item" onclick="alert('Opciones de calidad cargadas desde Amazon IVS')">
+                    <span>Reproducción/Calidad</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="settings-item" onclick="alert('Configuración de audio')">
+                    <span>Audio</span>
+                    <span>&gt;</span>
+                </div>
+            </div>
+
+            <!-- BARRA DE CONTROLES INFERIOR CON ENGRANAJE -->
+            <div class="video-custom-controls">
+                <div class="controls-left">
+                    <button class="ctrl-btn" id="playPauseBtn" title="Play/Pausa">⏸️</button>
+                    <button class="ctrl-btn" id="muteBtn" title="Mutear">🔊</button>
+                    <span style="font-size: 12px; color: #ff4545; font-weight: bold;">● LIVE</span>
+                </div>
+                <div class="controls-right">
+                    <button class="ctrl-btn" id="settingsBtn" title="Configuración">⚙️</button>
+                    <button class="ctrl-btn" id="fullscreenBtn" title="Pantalla completa">⛶</button>
+                </div>
+            </div>
         </div>
 
+        <!-- SECCIÓN DEL CHAT DE KICK -->
         <div class="chat-section">
             <div class="chat-header">Chat</div>
             <div class="chat-frame-container">
@@ -229,26 +320,70 @@
 
     </div>
 
+    <!-- BARRA INFERIOR DE BOTONES -->
     <div class="footer-buttons-bar">
         <a href="https://youtube.com" target="_blank" class="btn-link btn-youtube">YouTube</a>
         <a href="https://kick.com" target="_blank" class="btn-link btn-kick">Suscribirse (Kick)</a>
         <a href="https://patreon.com" target="_blank" class="btn-link btn-patreon">Patreon</a>
     </div>
 
+    <!-- 3. AQUÍ VA EL CÓDIGO JAVASCRIPT -->
     <script>
-        // Inicializar Video.js usando la tecnología de Amazon IVS
         document.addEventListener("DOMContentLoaded", () => {
-            registerIVSTech(videojs);
-            
-            const player = videojs('amazon-ivs-player', {
-                techOrder: ["AmazonIVS"],
-                autoplay: true,
-                muted: false,
-                liveui: true
+            const videoElement = document.getElementById('amazon-ivs-video');
+
+            // Inicializar el reproductor de Amazon IVS
+            if (IVSPlayer.isSupported) {
+                const player = IVSPlayer.create();
+                player.attachHTMLVideoElement(videoElement);
+                // Tu link .m3u8 de emisión en vivo
+                player.load("https://7c37b557078d.us-east-1.playback.live-video.net/api/video/v1/us-east-1.885191629510.channel.LV8ooIxv5Uqu.m3u8");
+                player.setVolume(0.8);
+                player.play();
+            }
+
+            // Lógica para abrir/cerrar el menú flotante del Engranaje ⚙️
+            const settingsBtn = document.getElementById('settingsBtn');
+            const settingsMenu = document.getElementById('settingsMenu');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const muteBtn = document.getElementById('muteBtn');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+            // Clic en el botón del engranaje
+            settingsBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                settingsMenu.classList.toggle('active');
             });
 
-            player.ready(() => {
-                console.log("Reproductor IVS con Video.js listo.");
+            // Cerrar menú si haces clic fuera de él
+            document.addEventListener('click', () => {
+                settingsMenu.classList.remove('active');
+            });
+
+            // Play / Pausa
+            playPauseBtn.addEventListener('click', () => {
+                if (videoElement.paused) {
+                    videoElement.play();
+                    playPauseBtn.textContent = '⏸️';
+                } else {
+                    videoElement.pause();
+                    playPauseBtn.textContent = '▶️';
+                }
+            });
+
+            // Mute / Unmute
+            muteBtn.addEventListener('click', () => {
+                videoElement.muted = !videoElement.muted;
+                muteBtn.textContent = videoElement.muted ? '🔇' : '🔊';
+            });
+
+            // Pantalla Completa
+            fullscreenBtn.addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    videoElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
             });
         });
     </script>
