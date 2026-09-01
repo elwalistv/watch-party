@@ -22,7 +22,6 @@
             overflow: hidden;
         }
 
-        /* Barra superior de meta general (Tipo banner superior) */
         .top-banner {
             background: #18181b;
             color: #fff;
@@ -42,16 +41,14 @@
             color: #ff75e6;
         }
 
-        /* Layout central dividido: Video a la izquierda, Chat a la derecha */
         .main-layout {
             display: grid;
             grid-template-columns: 1fr 340px;
             flex: 1;
-            height: calc(100vh - 105px); /* Descontando banner superior e inferior */
+            height: calc(100vh - 105px);
             width: 100vw;
         }
 
-        /* Contenedor del video principal con los textos superpuestos y barra inferior */
         .video-section {
             position: relative;
             background: #000;
@@ -62,39 +59,26 @@
             height: 100%;
             overflow: hidden;
         }
+        
         #amazon-ivs-video {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
 
-        /* Texto / Overlay superior izquierdo sobre el video (Ej: Ranking de Animes) */
-        .video-overlay-text {
-            position: absolute;
-            top: 40px;
-            left: 40px;
-            color: #fff;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        /* Texto / Overlay inferior izquierdo sobre el video (Ej: 3 SUBS DE KICK = 1 CAP) */
         .video-overlay-bottom-left {
             position: absolute;
             bottom: 60px;
             left: 30px;
             color: #ff75e6;
             font-weight: 900;
-            font-size: 24px;
+            font-size: 22px;
             text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
             pointer-events: none;
             z-index: 5;
             line-height: 1.2;
         }
 
-        /* Overlay inferior central (Ej: KIMETSU TEMP 3 CAP 6/8) */
         .video-overlay-center {
             position: absolute;
             bottom: 60px;
@@ -102,7 +86,7 @@
             transform: translateX(-50%);
             color: #ff9eee;
             font-weight: 900;
-            font-size: 28px;
+            font-size: 26px;
             text-align: center;
             text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
             pointer-events: none;
@@ -110,7 +94,6 @@
             line-height: 1.2;
         }
 
-        /* Cámara flotante del streamer abajo a la derecha del video */
         .floating-cam {
             position: absolute;
             bottom: 60px;
@@ -133,6 +116,77 @@
             background: rgba(0, 0, 0, 0.75);
             padding: 4px 8px;
             border-radius: 4px;
+        }
+
+        /* Barra de controles inferior flotante sobre el video */
+        .video-custom-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 45px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            z-index: 20;
+        }
+        .controls-left, .controls-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .ctrl-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            opacity: 0.85;
+            transition: opacity 0.2s;
+        }
+        .ctrl-btn:hover {
+            opacity: 1;
+        }
+
+        /* Menú popup de configuración (Engranaje) */
+        .settings-menu {
+            position: absolute;
+            bottom: 50px;
+            right: 45px;
+            background: #18181b;
+            border: 1px solid #2f2f35;
+            border-radius: 8px;
+            width: 240px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 25;
+            overflow: hidden;
+        }
+        .settings-menu.active {
+            display: block;
+        }
+        .settings-item {
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #efeff1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid #2f2f35;
+        }
+        .settings-item:hover {
+            background: #2f2f35;
+        }
+        .settings-item:last-child {
+            border-bottom: none;
         }
 
         /* Panel de Chat Lateral Derecho */
@@ -163,7 +217,7 @@
             border: none;
         }
 
-        /* Barra de botones inferior estilo plataforma (YouTube, Suscribirse, Patreon, etc.) */
+        /* Barra de botones inferior general */
         .footer-buttons-bar {
             height: 45px;
             background: #09090b;
@@ -196,7 +250,6 @@
         .btn-kick { background: #53fc18; color: #000; border-color: #53fc18; font-weight: 700; }
         .btn-patreon { background: #ff424d; border-color: #ff424d; }
 
-        /* Responsividad para móviles */
         @media (max-width: 900px) {
             .main-layout {
                 grid-template-columns: 1fr;
@@ -204,11 +257,11 @@
             }
             .floating-cam {
                 width: 130px;
-                bottom: 45px;
+                bottom: 50px;
                 right: 15px;
             }
-            .video-overlay-bottom-left { font-size: 14px; bottom: 45px; left: 15px; }
-            .video-overlay-center { font-size: 16px; bottom: 45px; }
+            .video-overlay-bottom-left { font-size: 14px; bottom: 50px; left: 15px; }
+            .video-overlay-center { font-size: 16px; bottom: 50px; }
         }
     </style>
 </head>
@@ -216,7 +269,7 @@
 
     <!-- Banner Superior de Metas -->
     <div class="top-banner">
-        <span>🎬</span> META CASTILLO INFINITO 19/25 SUBS KICK
+        <span>🎬</span> 12 SUBS KICK = VEMOS HOY MILES MORALES 1 0/12
     </div>
 
     <!-- Layout Central: Video y Chat -->
@@ -224,27 +277,42 @@
         
         <!-- Columna Izquierda: Video Principal y Overlays -->
         <div class="video-section">
-            <!-- Reproductor Amazon IVS -->
-            <video id="amazon-ivs-video" playsinline controls autoplay></video>
-            
-            <!-- Overlay superior izquierdo (Opcional para tus textos o rankings) -->
-            <div class="video-overlay-text">
-                <!-- Puedes colocar aquí tus indicadores internos -->
-            </div>
+            <video id="amazon-ivs-video" playsinline></video>
 
-            <!-- Textos informativos inferiores flotantes sobre el video -->
+            <!-- Textos informativos inferiores flotantes -->
             <div class="video-overlay-bottom-left">
-                3 SUBS DE KICK = 1 CAP<br>
-                <span style="font-size: 18px; color: #fff;">0/9 SUBS = 0/3 CAPS</span>
+                12 SUBS KICK = VEMOS HOY MILES MORALES 1 0/12
             </div>
 
-            <div class="video-overlay-center">
-                KIMETSU<br>TEMP 3<br>CAP 6/8
-            </div>
-
-            <!-- Cámara flotante del streamer abajo a la derecha -->
+            <!-- Cámara flotante del streamer -->
             <div class="floating-cam">
                 <span>Tu Cámara</span>
+            </div>
+
+            <!-- Menú Desplegable de Ajustes (Engranaje) -->
+            <div class="settings-menu" id="settingsMenu">
+                <div class="settings-item" onclick="alert('Calidad automática (IVS)')">
+                    <span>Reproducción/Calidad</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="settings-item" onclick="alert('Audio principal')">
+                    <span>Audio</span>
+                    <span>&gt;</span>
+                </div>
+            </div>
+
+            <!-- Barra de controles personalizada abajo del video -->
+            <div class="video-custom-controls">
+                <div class="controls-left">
+                    <button class="ctrl-btn" id="playPauseBtn" title="Reproducir/Pausar">⏸️</button>
+                    <button class="ctrl-btn" id="muteBtn" title="Silenciar">🔊</button>
+                    <span style="font-size: 12px; color: #adadb8;" id="liveIndicator">● LIVE</span>
+                </div>
+                <div class="controls-right">
+                    <button class="ctrl-btn" id="settingsBtn" title="Configuración">⚙️</button>
+                    <button class="ctrl-btn" id="theaterBtn" title="Teatro">▱</button>
+                    <button class="ctrl-btn" id="fullscreenBtn" title="Pantalla completa">⛶</button>
+                </div>
             </div>
         </div>
 
@@ -252,7 +320,6 @@
         <div class="chat-section">
             <div class="chat-header">Chat</div>
             <div class="chat-frame-container">
-                <!-- Reemplaza con tu enlace de chat integrado -->
                 <iframe src="https://kick.com/popout/elwalistv/chat" title="Chat en vivo"></iframe>
             </div>
         </div>
@@ -264,22 +331,62 @@
         <a href="https://youtube.com" target="_blank" class="btn-link btn-youtube">YouTube</a>
         <a href="https://kick.com" target="_blank" class="btn-link btn-kick">Suscribirse (Kick)</a>
         <a href="https://patreon.com" target="_blank" class="btn-link btn-patreon">Patreon</a>
-        <a href="https://kick.com" target="_blank" class="btn-link">Suscribirse</a>
     </div>
 
-    <!-- Script del Reproductor de Amazon IVS -->
+    <!-- Script del Reproductor de Amazon IVS y Controles -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            const videoElement = document.getElementById('amazon-ivs-video');
+            let player = null;
+
             if (IVISPlayer.isSupported) {
-                const player = IVISPlayer.create();
-                player.attachHTMLVideoElement(document.getElementById('amazon-ivs-video'));
-                
-                // Tu URL exacta de reproducción de Amazon IVS
+                player = IVISPlayer.create();
+                player.attachHTMLVideoElement(videoElement);
                 player.load("https://7c37b557078d.us-east-1.playback.live-video.net/api/video/v1/us-east-1.885191629510.channel.LV8ooIxv5Uqu.m3u8");
-                
                 player.setVolume(0.8);
                 player.play();
             }
+
+            // Lógica de botones de control
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const muteBtn = document.getElementById('muteBtn');
+            const settingsBtn = document.getElementById('settingsBtn');
+            const settingsMenu = document.getElementById('settingsMenu');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+            playPauseBtn.addEventListener('click', () => {
+                if (videoElement.paused) {
+                    videoElement.play();
+                    playPauseBtn.textContent = '⏸️';
+                } else {
+                    videoElement.pause();
+                    playPauseBtn.textContent = '▶️';
+                }
+            });
+
+            muteBtn.addEventListener('click', () => {
+                videoElement.muted = !videoElement.muted;
+                muteBtn.textContent = videoElement.muted ? '🔇' : '🔊';
+            });
+
+            settingsBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                settingsMenu.classList.toggle('active');
+            });
+
+            document.addEventListener('click', () => {
+                settingsMenu.classList.remove('active');
+            });
+
+            fullscreenBtn.addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    videoElement.requestFullscreen().catch(err => {
+                        console.error("Error al intentar pantalla completa:", err);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            });
         });
     </script>
 </body>
