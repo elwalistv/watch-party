@@ -2,27 +2,193 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>elwalis.com - Transmisión en Vivo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>elwalis.com - Watch Party en Vivo</title>
+    <!-- Importar el reproductor oficial de Amazon IVS -->
     <script src="https://player.live-video.net/1.24.0/amazon-ivs-player.min.js"></script>
     <style>
-        body { background: #0e0e10; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        #video-container { width: 80%; max-width: 960px; aspect-ratio: 16/9; background: #000; }
-        video { width: 100%; height: 100%; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #0e0e10;
+            color: #fff;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* Contenedor principal dividido: Video a la izquierda, Chat a la derecha */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            flex: 1;
+            height: calc(100vh - 60px);
+            width: 100vw;
+        }
+        /* Sección del reproductor y elementos flotantes */
+        .video-section {
+            position: relative;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        #amazon-ivs-video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        /* Recuadro de la cámara del streamer flotante */
+        .floating-cam {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 240px;
+            aspect-ratio: 16/9;
+            background: #18181b;
+            border: 2px solid #9146ff;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .floating-cam span {
+            font-size: 12px;
+            color: #efeff1;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        /* Panel del Chat lateral */
+        .chat-section {
+            background: #18181b;
+            border-left: 1px solid #2f2f35;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .chat-header {
+            padding: 12px 16px;
+            font-weight: 700;
+            font-size: 14px;
+            border-bottom: 1px solid #2f2f35;
+            background: #1f1f23;
+            color: #efeff1;
+        }
+        .chat-frame-container {
+            flex: 1;
+            width: 100%;
+            background: #0e0e10;
+        }
+        .chat-frame-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* Barra de metas inferior */
+        .footer-bar {
+            height: 60px;
+            background: #1f1f23;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            font-weight: 700;
+            border-top: 1px solid #2f2f35;
+            z-index: 20;
+        }
+        .meta-text {
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .meta-badge {
+            background: #53fc18;
+            color: #000;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        /* Responsividad para pantallas pequeñas */
+        @media (max-width: 900px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: 60vh 1fr;
+            }
+            .floating-cam {
+                width: 140px;
+                top: 12px;
+                right: 12px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div id="video-container">
-        <video id="amazon-ivs-video" playsinline controls></video>
+    <!-- Layout principal -->
+    <div class="main-layout">
+        
+        <!-- Columna Izquierda: Video y Cámara Flotante -->
+        <div class="video-section">
+            <!-- Reproductor de Amazon IVS -->
+            <video id="amazon-ivs-video" playsinline controls autoplay></video>
+            
+            <!-- Tu cámara web o de reacción flotando arriba a la derecha -->
+            <div class="floating-cam">
+                <span>Tu Cámara / OBS</span>
+            </div>
+        </div>
+
+        <!-- Columna Derecha: Chat integrado -->
+        <div class="chat-section">
+            <div class="chat-header">Chat del Stream</div>
+            <div class="chat-frame-container">
+                <!-- Reemplaza el src con tu enlace de chat (BotRix, Kick o Twitch) -->
+                <iframe src="https://kick.com/popout/elwalistv/chat" title="Chat en vivo"></iframe>
+            </div>
+        </div>
+
     </div>
 
+    <!-- Barra Inferior de Metas / Objetivos -->
+    <div class="footer-bar">
+        <div class="meta-text">
+            <span class="meta-badge">12 SUBS KICK</span> 
+            <span>= VEMOS HOY MILES MORALES 1 (0/12)</span>
+        </div>
+        <div style="font-size: 13px; color: #adadb8;">
+            elwalis.com • Live Watch Party
+        </div>
+    </div>
+
+    <!-- Script del Reproductor de Amazon IVS -->
     <script>
-        if (IVISPlayer.isSupported) {
-            const player = IVISPlayer.create();
-            player.attachHTMLVideoElement(document.getElementById('amazon-ivs-video'));
-            player.load("https://7c37b557078d.us-east-1.playback.live-video.net/api/video/v1/us-east-1.885191629510.channel.LV8ooIxv5Uqu.m3u8");
-            player.play();
-        }
+        document.addEventListener("DOMContentLoaded", () => {
+            if (IVISPlayer.isSupported) {
+                const player = IVISPlayer.create();
+                player.attachHTMLVideoElement(document.getElementById('amazon-ivs-video'));
+                
+                // Carga tu URL de reproducción exacta de AWS IVS
+                player.load("https://7c37b557078d.us-east-1.playback.live-video.net/api/video/v1/us-east-1.885191629510.channel.LV8ooIxv5Uqu.m3u8");
+                
+                player.setVolume(0.8);
+                player.play();
+            } else {
+                console.error("El reproductor de Amazon IVS no es compatible con este navegador.");
+            }
+        });
     </script>
 </body>
 </html>
