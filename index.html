@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>elwalis.com - Watch Party</title>
 
-    <!-- 1. LIBRERÍA OFICIAL DE AMAZON IVS -->
     <script src="https://player.live-video.net/1.24.0/amazon-ivs-player.min.js"></script>
 
-    <!-- 2. AQUÍ VAN TODOS LOS ESTILOS (CSS) -->
     <style>
         * {
             box-sizing: border-box;
@@ -67,6 +65,38 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
+        }
+
+        /* Pantalla de Offline (Se muestra automáticamente cuando el stream termina) */
+        .offline-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0b0b0d;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 40;
+            gap: 15px;
+        }
+        .offline-screen.active {
+            display: flex;
+        }
+        .offline-logo {
+            font-size: 48px;
+        }
+        .offline-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #efeff1;
+            letter-spacing: 1px;
+        }
+        .offline-text {
+            font-size: 14px;
+            color: #adadb8;
         }
 
         /* Textos e información flotante */
@@ -167,12 +197,12 @@
             border-radius: 8px;
             width: 240px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-            display: none; /* Oculto por defecto */
+            display: none;
             z-index: 25;
             overflow: hidden;
         }
         .settings-menu.active {
-            display: block; /* Se muestra al dar clic */
+            display: block;
         }
         .settings-item {
             padding: 12px 16px;
@@ -216,14 +246,14 @@
             border: none;
         }
 
-        /* Botones del Footer */
+        /* Botones del Footer con Efecto de Brillo Neon */
         .footer-buttons-bar {
             height: 45px;
             background: #09090b;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 15px;
             border-top: 1px solid #2f2f35;
             z-index: 30;
             padding: 0 15px;
@@ -231,7 +261,7 @@
         .btn-link {
             background: #1f1f23;
             color: #fff;
-            padding: 6px 14px;
+            padding: 6px 16px;
             border-radius: 6px;
             font-size: 13px;
             font-weight: 600;
@@ -240,12 +270,39 @@
             align-items: center;
             gap: 6px;
             border: 1px solid #2f2f35;
-            transition: background 0.2s;
+            position: relative;
+            transition: all 0.3s ease;
         }
-        .btn-link:hover { background: #2f2f35; }
-        .btn-youtube { background: #ff0000; border-color: #ff0000; }
-        .btn-kick { background: #53fc18; color: #000; border-color: #53fc18; font-weight: 700; }
-        .btn-patreon { background: #ff424d; border-color: #ff424d; }
+        
+        /* Animación y efecto de brillo constante en los botones */
+        .btn-youtube { 
+            background: #ff0000; 
+            border-color: #ff0000; 
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        .btn-youtube:hover {
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.9), 0 0 30px rgba(255, 0, 0, 0.6);
+        }
+
+        .btn-kick { 
+            background: #53fc18; 
+            color: #000; 
+            border-color: #53fc18; 
+            font-weight: 700;
+            box-shadow: 0 0 10px rgba(83, 252, 24, 0.5);
+        }
+        .btn-kick:hover {
+            box-shadow: 0 0 20px rgba(83, 252, 24, 0.9), 0 0 30px rgba(83, 252, 24, 0.6);
+        }
+
+        .btn-patreon { 
+            background: #ff424d; 
+            border-color: #ff424d; 
+            box-shadow: 0 0 10px rgba(255, 66, 77, 0.5);
+        }
+        .btn-patreon:hover {
+            box-shadow: 0 0 20px rgba(255, 66, 77, 0.9), 0 0 30px rgba(255, 66, 77, 0.6);
+        }
 
         @media (max-width: 900px) {
             .main-layout {
@@ -260,16 +317,21 @@
 </head>
 <body>
 
-    <!-- Banner de Metas -->
     <div class="top-banner">
         <span>🎬</span> 12 SUBS KICK = VEMOS HOY MILES MORALES 1 0/12
     </div>
 
     <div class="main-layout">
         
-        <!-- SECCIÓN DE VIDEO Y CAPAS FLOTANTES -->
         <div class="video-section">
             <video id="amazon-ivs-video" playsinline></video>
+
+            <!-- Pantalla automática de fuera de línea -->
+            <div class="offline-screen" id="offlineScreen">
+                <div class="offline-logo">🔴</div>
+                <div class="offline-title">DIRECTO FINALIZADO</div>
+                <div class="offline-text">El stream ha terminado. ¡Gracias por acompañarnos!</div>
+            </div>
 
             <div class="video-overlay-bottom-left">
                 3 SUBS DE KICK = 1 CAP<br>
@@ -284,9 +346,8 @@
                 <span>Tu Cámara</span>
             </div>
 
-            <!-- MENÚ FLOTANTE DEL ENGRANAJE -->
             <div class="settings-menu" id="settingsMenu">
-                <div class="settings-item" onclick="alert('Opciones de calidad cargadas desde Amazon IVS')">
+                <div class="settings-item" onclick="alert('Calidades de Amazon IVS')">
                     <span>Reproducción/Calidad</span>
                     <span>&gt;</span>
                 </div>
@@ -296,12 +357,11 @@
                 </div>
             </div>
 
-            <!-- BARRA DE CONTROLES INFERIOR CON ENGRANAJE -->
             <div class="video-custom-controls">
                 <div class="controls-left">
                     <button class="ctrl-btn" id="playPauseBtn" title="Play/Pausa">⏸️</button>
                     <button class="ctrl-btn" id="muteBtn" title="Mutear">🔊</button>
-                    <span style="font-size: 12px; color: #ff4545; font-weight: bold;">● LIVE</span>
+                    <span style="font-size: 12px; color: #ff4545; font-weight: bold;" id="liveIndicator">● LIVE</span>
                 </div>
                 <div class="controls-right">
                     <button class="ctrl-btn" id="settingsBtn" title="Configuración">⚙️</button>
@@ -310,7 +370,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN DEL CHAT DE KICK -->
         <div class="chat-section">
             <div class="chat-header">Chat</div>
             <div class="chat-frame-container">
@@ -320,47 +379,54 @@
 
     </div>
 
-    <!-- BARRA INFERIOR DE BOTONES -->
     <div class="footer-buttons-bar">
         <a href="https://youtube.com" target="_blank" class="btn-link btn-youtube">YouTube</a>
         <a href="https://kick.com" target="_blank" class="btn-link btn-kick">Suscribirse (Kick)</a>
         <a href="https://patreon.com" target="_blank" class="btn-link btn-patreon">Patreon</a>
     </div>
 
-    <!-- 3. AQUÍ VA EL CÓDIGO JAVASCRIPT -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const videoElement = document.getElementById('amazon-ivs-video');
+            const offlineScreen = document.getElementById('offlineScreen');
+            const liveIndicator = document.getElementById('liveIndicator');
 
-            // Inicializar el reproductor de Amazon IVS
             if (IVSPlayer.isSupported) {
                 const player = IVSPlayer.create();
                 player.attachHTMLVideoElement(videoElement);
-                // Tu link .m3u8 de emisión en vivo
                 player.load("https://7c37b557078d.us-east-1.playback.live-video.net/api/video/v1/us-east-1.885191629510.channel.LV8ooIxv5Uqu.m3u8");
                 player.setVolume(0.8);
                 player.play();
+
+                // Detectar automáticamente cuando el stream de Amazon IVS se apaga o finaliza
+                player.addEventListener(IVSPlayer.PlayerState.IDLE, () => {
+                    offlineScreen.classList.add('active');
+                    liveIndicator.style.color = '#777';
+                    liveIndicator.textContent = '○ OFFLINE';
+                });
+
+                player.addEventListener(IVSPlayer.PlayerState.ENDED, () => {
+                    offlineScreen.classList.add('active');
+                    liveIndicator.style.color = '#777';
+                    liveIndicator.textContent = '○ OFFLINE';
+                });
             }
 
-            // Lógica para abrir/cerrar el menú flotante del Engranaje ⚙️
             const settingsBtn = document.getElementById('settingsBtn');
             const settingsMenu = document.getElementById('settingsMenu');
             const playPauseBtn = document.getElementById('playPauseBtn');
             const muteBtn = document.getElementById('muteBtn');
             const fullscreenBtn = document.getElementById('fullscreenBtn');
 
-            // Clic en el botón del engranaje
             settingsBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 settingsMenu.classList.toggle('active');
             });
 
-            // Cerrar menú si haces clic fuera de él
             document.addEventListener('click', () => {
                 settingsMenu.classList.remove('active');
             });
 
-            // Play / Pausa
             playPauseBtn.addEventListener('click', () => {
                 if (videoElement.paused) {
                     videoElement.play();
@@ -371,13 +437,11 @@
                 }
             });
 
-            // Mute / Unmute
             muteBtn.addEventListener('click', () => {
                 videoElement.muted = !videoElement.muted;
                 muteBtn.textContent = videoElement.muted ? '🔇' : '🔊';
             });
 
-            // Pantalla Completa
             fullscreenBtn.addEventListener('click', () => {
                 if (!document.fullscreenElement) {
                     videoElement.requestFullscreen();
