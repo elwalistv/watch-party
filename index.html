@@ -7,11 +7,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="main-container">
+    <!-- Mensaje que aparecerá cuando el stream esté apagado -->
+    <div id="offline-screen" class="offline-container" style="display: none;">
+        <div class="offline-content">
+            <h1>🔴 Stream Finalizado</h1>
+            <p>El directo ha terminado por ahora. ¡Gracias por acompañarnos!</p>
+        </div>
+    </div>
+
+    <div class="main-container" id="main-content">
         <!-- Contenedor del Reproductor de Video -->
         <div class="video-section">
             <div class="video-container">
-                <!-- Reproductor oficial de Kick -->
                 <iframe src="https://player.kick.com/elwalistv" 
                         height="100%" 
                         width="100%" 
@@ -21,7 +28,6 @@
                 </iframe>
             </div>
             
-            <!-- Barra de botones para cambiar de plataforma -->
             <div class="platform-bar">
                 <button class="btn-platform yt">YouTube</button>
                 <button class="btn-platform kick active">Kick</button>
@@ -31,7 +37,6 @@
 
         <!-- Contenedor del Chat -->
         <div class="chat-section">
-            <!-- Chat oficial en Modo Popout de Kick -->
             <iframe src="https://kick.com/popout/elwalistv/chat" 
                     height="100%" 
                     width="100%" 
@@ -39,5 +44,38 @@
             </iframe>
         </div>
     </div>
+
+    <!-- Código JavaScript para detectar si estás en directo -->
+    <script>
+        async function checkStreamStatus() {
+            try {
+                // Usamos un servicio público para verificar el estado de la API de Kick
+                const response = await fetch('https://kick.com/api/v2/channels/elwalistv');
+                const data = await response.json();
+                
+                const isLive = data && data.livestream !== null;
+                const offlineScreen = document.getElementById('offline-screen');
+                const mainContent = document.getElementById('main-content');
+
+                if (!isLive) {
+                    // Si NO estás en directo, oculta el reproductor y muestra el aviso de offline
+                    offlineScreen.style.display = 'flex';
+                    mainContent.style.display = 'none';
+                } else {
+                    // Si SÍ estás en directo, muestra la página normal
+                    offlineScreen.style.display = 'none';
+                    mainContent.style.display = 'flex';
+                }
+            } catch (error) {
+                console.error("No se pudo verificar el estado del stream", error);
+            }
+        }
+
+        // Comprueba el estado al cargar la página
+        checkStreamStatus();
+
+        // Vuelve a comprobar cada 60 segundos por si inicias o terminas stream
+        setInterval(checkStreamStatus, 60000);
+    </script>
 </body>
 </html>
