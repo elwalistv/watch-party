@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Watch Party - ElWalis</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Librería HLS.js para reproducir enlaces .m3u8 de Amazon IVS -->
+    <!-- Librería HLS.js para el reproductor de Amazon IVS -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
-    <!-- Pantalla que aparecerá cuando el stream esté finalizado -->
+    <!-- Pantalla de Stream Finalizado -->
     <div id="offline-screen" class="offline-container" style="display: none;">
         <div class="offline-content">
             <h1>🔴 Stream Finalizado</h1>
@@ -18,20 +18,21 @@
     </div>
 
     <div class="main-container" id="main-content">
-        <!-- Contenedor del Reproductor de Amazon IVS -->
+        <!-- Sección Izquierda: Reproductor y Barra de Botones -->
         <div class="video-section">
             <div class="video-container">
                 <video id="video-player" controls autoplay playsinline width="100%" height="100%"></video>
             </div>
             
+            <!-- (Punto 4) Barra de botones inferior exacta -->
             <div class="platform-bar">
                 <button class="btn-platform yt">YouTube</button>
                 <button class="btn-platform kick active">Kick</button>
-                <button class="btn-platform rumble">Rumble</button>
+                <button class="btn-platform patreon">Patreon</button>
             </div>
         </div>
 
-        <!-- Contenedor del Chat de Kick -->
+        <!-- (Punto 5) Sección Derecha: Chat de Kick acoplado -->
         <div class="chat-section">
             <iframe src="https://kick.com/popout/elwalistv/chat" 
                     height="100%" 
@@ -42,7 +43,7 @@
     </div>
 
     <script>
-        // Reproductor configurado con tu nuevo enlace de Amazon IVS
+        // Reproductor de Amazon IVS
         const video = document.getElementById('video-player');
         const videoSrc = 'https://7c37b557078d.us-east-1.playback.live-video.net/api/video/v1/us-east-1.885191629510.channel.yIDkn5FisDxT.m3u8';
 
@@ -63,7 +64,7 @@
             });
         }
 
-        // Función para verificar si estás en directo en Kick y ocultar/mostrar la página
+        // Verificador de estado en directo de Kick
         async function checkStreamStatus() {
             try {
                 const response = await fetch('https://kick.com/api/v2/channels/elwalistv');
