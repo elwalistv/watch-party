@@ -3,52 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream IVS + Chat de Kick</title>
+    
+    <!-- SDK del Reproductor Web de Amazon IVS -->
+    <script src="https://live-video.net"></script>
 
-    <title>ELWALIS TV</title>
-
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #0e0e10;
+            font-family: sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            color: #fff;
+        }
+        /* Contenedor Principal en Grid */
+        .stream-container {
+            display: grid;
+            grid-template-columns: 1fr 340px; /* Video ocupa el resto, Chat fijo en 340px */
+            width: 100%;
+            height: 100%;
+        }
+        /* Sección del Video */
+        .video-box {
+            position: relative;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        /* Sección del Chat */
+        .chat-box {
+            border-left: 1px solid #2f2f35;
+            background-color: #19191c;
+            height: 100%;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* Responsividad para móviles (Chat abajo) */
+        @media (max-width: 768px) {
+            .stream-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 56.25vw 1fr; /* Mantiene proporción 16:9 en video */
+            }
+            .chat-box {
+                border-left: none;
+                border-top: 1px solid #2f2f35;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-    <header>
-        <div class="logo">ELWALIS TV</div>
-
-        <div class="live">
-            🔴 EN VIVO
+    <div class="stream-container">
+        <!-- 1. REPRODUCTOR AMAZON IVS -->
+        <div class="video-box">
+            <video id="video-player" controls playsinline></video>
         </div>
-    </header>
 
+        <!-- 2. EMBED CHAT DE KICK -->
+        <div class="chat-box">
+            <!-- Reemplaza 'TU_CANAL_DE_KICK' con tu usuario real en minúsculas -->
+            <iframe src="https://kick.com" autocomplete="off"></div>
+        </div>
+    </div>
 
-    <main>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Verificar si el SDK de IVS es compatible con el navegador
+            if (AmazonIVSPlayer.isPlayerSupported) {
+                const player = AmazonIVSPlayer.create();
+                
+                // Asociar el reproductor IVS a la etiqueta <video>
+                player.attachHTMLVideoElement(document.getElementById("video-player"));
 
-        <section class="player-container">
+                // REEMPLAZA ESTA URL por tu enlace .m3u8 de reproducción de Amazon IVS
+                const streamUrl = "https://live-video.net";
 
-            <video
-                id="video-player"
-                controls
-                playsinline>
-            </video>
-
-        </section>
-
-
-        <section class="info">
-
-            <h1>ELWALIS TV — EN VIVO</h1>
-
-            <p>
-                Estamos transmitiendo en vivo.
-            </p>
-
-        </section>
-
-    </main>
-
-
-    <script src="https://player.live-video.net/1.46.0/amazon-ivs-player.min.js"></script>
-
-    <script src="script.js"></script>
+                player.load(streamUrl);
+                player.play();
+            } else {
+                console.error("Tu navegador no soporta el reproductor de Amazon IVS.");
+            }
+        });
+    </script>
 
 </body>
 </html>
