@@ -3,103 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stream IVS + Chat de Kick</title>
-    
-    <!-- SDK del Reproductor Web de Amazon IVS -->
-    <script src="https://live-video.net"></script>
-
+    <title>Mi Watch Party</title>
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
         body {
             background-color: #0e0e10;
-            font-family: sans-serif;
-            display: flex;
+            color: #ffffff;
+            font-family: Inter, sans-serif;
             height: 100vh;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
-            color: #fff;
         }
-        /* Contenedor Principal en Grid */
-        .stream-container {
-            display: grid;
-            grid-template-columns: 1fr 340px; /* Video ocupa el resto, Chat fijo en 340px */
-            width: 100%;
-            height: 100%;
+        /* Contenedor principal de dos columnas */
+        .main-container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 70px);
         }
-        /* Sección del Video */
-        .video-box {
-            position: relative;
+        /* Columna Izquierda: Reproductor y Botones */
+        .player-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             background-color: #000;
+        }
+        .video-container {
+            flex: 1;
+            position: relative;
+            background: #18181b;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        /* Barra inferior de botones y enlaces */
+        .bottom-bar {
+            height: 60px;
+            background-color: #18181b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 0 20px;
+            border-top: 1px solid #2f2f35;
         }
-        /* Sección del Chat */
-        .chat-box {
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-youtube { background-color: #ff0000; }
+        .btn-kick { background-color: #00e701; color: #000; }
+        .btn-patreon { background-color: #ff424d; }
+        .btn-sub { background-color: #772ce8; }
+
+        /* Columna Derecha: Chat */
+        .chat-section {
+            width: 340px;
+            background-color: #18181b;
             border-left: 1px solid #2f2f35;
-            background-color: #19191c;
-            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
-        iframe {
+        .chat-section iframe {
             width: 100%;
             height: 100%;
             border: none;
-        }
-        /* Responsividad para móviles (Chat abajo) */
-        @media (max-width: 768px) {
-            .stream-container {
-                grid-template-columns: 1fr;
-                grid-template-rows: 56.25vw 1fr; /* Mantiene proporción 16:9 en video */
-            }
-            .chat-box {
-                border-left: none;
-                border-top: 1px solid #2f2f35;
-            }
         }
     </style>
 </head>
 <body>
 
-    <div class="stream-container">
-        <!-- 1. REPRODUCTOR AMAZON IVS -->
-        <div class="video-box">
-            <video id="video-player" controls playsinline></video>
+    <div class="main-container">
+        <!-- SECCIÓN IZQUIERDA: Reproductor de video -->
+        <div class="player-section">
+            <div class="video-container">
+                <!-- Aquí puedes colocar tu reproductor HTML5, iframe de video o reproductor de streaming -->
+                <video controls autoplay style="width: 100%; height: 100%; object-fit: contain;">
+                    <source src="TU_ENLACE_DE_VIDEO_O_STREAM.mp4" type="video/mp4">
+                    Tu navegador no soporta video HTML5.
+                </video>
+            </div>
+            
+            <!-- Barra inferior con botones personalizados -->
+            <div class="bottom-bar">
+                <a href="https://youtube.com" target="_blank" class="btn btn-youtube">YouTube</a>
+                <a href="https://kick.com" target="_blank" class="btn btn-kick">Suscribirse a Kick</a>
+                <a href="https://patreon.com" target="_blank" class="btn btn-patreon">Patreon</a>
+                <a href="#" class="btn btn-sub">Suscribirse</a>
+            </div>
         </div>
 
-        <!-- 2. EMBED CHAT DE KICK -->
-        <div class="chat-box">
-            <!-- Reemplaza 'TU_CANAL_DE_KICK' con tu usuario real en minúsculas -->
-            <iframe src="https://kick.com" autocomplete="off"></div>
+        <!-- SECCIÓN DERECHA: Chat integrado de Kick -->
+        <div class="chat-section">
+            <!-- Reemplaza 'tu_canal_de_kick' por tu nombre de usuario real en Kick -->
+            <iframe src="https://kick.com/tu_canal_de_kick/chatroom" 
+                    sandbox="allow-same-origin allow-scripts allow-popups allow-modals">
+            </iframe>
         </div>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // Verificar si el SDK de IVS es compatible con el navegador
-            if (AmazonIVSPlayer.isPlayerSupported) {
-                const player = AmazonIVSPlayer.create();
-                
-                // Asociar el reproductor IVS a la etiqueta <video>
-                player.attachHTMLVideoElement(document.getElementById("video-player"));
-
-                // REEMPLAZA ESTA URL por tu enlace .m3u8 de reproducción de Amazon IVS
-                const streamUrl = "https://live-video.net";
-
-                player.load(streamUrl);
-                player.play();
-            } else {
-                console.error("Tu navegador no soporta el reproductor de Amazon IVS.");
-            }
-        });
-    </script>
 
 </body>
 </html>
