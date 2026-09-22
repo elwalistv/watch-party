@@ -3,183 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>watch.elwalis.com</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background-color: #0e0e10;
-            color: #ffffff;
-            font-family: Inter, sans-serif;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        /* Contenedor principal de dos columnas */
-        .main-container {
-            display: flex;
-            flex: 1;
-            height: 100vh;
-        }
-        /* Columna Izquierda: Reproductor */
-        .player-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: #000;
-            position: relative;
-        }
-        .video-container {
-            flex: 1;
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        
-        /* Barra de controles inferior del reproductor (Estilo exacto) */
-        .player-controls {
-            height: 48px;
-            background-color: rgba(0, 0, 0, 0.85);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 16px;
-            position: absolute;
-            bottom: 60px; /* Se eleva sobre la barra de botones */
-            left: 0;
-            right: 0;
-        }
-        .controls-left, .controls-right {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .live-badge {
-            background-color: #e91e63;
-            color: white;
-            font-weight: bold;
-            font-size: 11px;
-            padding: 2px 6px;
-            border-radius: 3px;
-            letter-spacing: 0.5px;
-        }
-        .viewer-count {
-            font-size: 13px;
-            color: #efeff1;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .timer {
-            font-size: 13px;
-            color: #efeff1;
-        }
-        .control-icon {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Franja inferior con los botones de redes */
-        .bottom-links-bar {
-            height: 60px;
-            background-color: #0e0e10;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 12px;
-            padding: 0 20px;
-            border-top: 1px solid #1f1f23;
-        }
-        .pill-btn {
-            padding: 8px 18px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 13px;
-            text-decoration: none;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-youtube { background-color: #ff0000; }
-        .btn-kick-sub { background-color: #00e701; color: #000; }
-        .btn-patreon { background-color: #e85b31; }
-        .btn-purple-sub { background-color: #772ce8; }
-
-        /* Columna Derecha: Chat */
-        .chat-section {
-            width: 340px;
-            background-color: #18181b;
-            border-left: 1px solid #2f2f35;
-            display: flex;
-            flex-direction: column;
-        }
-        .chat-section iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-    </style>
+    <title>Watch Party - ElWalis</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="main-container">
-        <!-- SECCIÓN IZQUIERDA -->
+    <div class="app-container">
+        <!-- Contenedor del Reproductor (Kick / IVS) -->
         <div class="player-section">
-            <div class="video-container">
-                <!-- Aquí va tu reproductor web o etiqueta video -->
-                <video autoplay muted style="width: 100%; height: 100%; object-fit: contain;">
-                    <source src="TU_STREAM_O_VIDEO.mp4" type="video/mp4">
-                </video>
-
-                <!-- Barra de controles superpuesta sobre el reproductor -->
-                <div class="player-controls">
-                    <div class="controls-left">
-                        <button class="control-icon">❚❚</button>
-                        <button class="control-icon">🔊</button>
-                        <span class="live-badge">LIVE</span>
-                        <span class="viewer-count">👁 21</span>
-                        <span class="timer">49:37</span>
-                    </div>
-                    <div class="controls-right">
-                        <button class="control-icon">⚙️</button>
-                        <button class="control-icon">📺</button>
-                        <button class="control-icon">⛶</button>
-                        <button class="control-icon">🖲️</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Franja inferior de accesos directos -->
-            <div class="bottom-links-bar">
-                <a href="https://youtube.com" target="_blank" class="pill-btn btn-youtube">▶ YouTube</a>
-                <a href="https://kick.com" target="_blank" class="pill-btn btn-kick-sub">K Suscribirse</a>
-                <a href="https://patreon.com" target="_blank" class="pill-btn btn-patreon">Patreon</a>
-                <a href="#" class="pill-btn btn-purple-sub">Suscribirse 💜</a>
+            <div id="video-container">
+                <!-- Aquí puedes incrustar el iframe del reproductor o el reproductor web -->
+                <iframe src="https://player.kick.com/TUSCANAL"</iframe>
             </div>
         </div>
 
-        <!-- SECCIÓN DERECHA: Chat de Kick -->
+        <!-- Contenedor del Chat -->
         <div class="chat-section">
-            <iframe src="https://kick.com/tu_canal_de_kick/chatroom" 
-                    sandbox="allow-same-origin allow-scripts allow-popups allow-modals">
-            </iframe>
+            <iframe src="https://kick.com/TUSCANAL/chatroom" frameborder="0"></iframe>
         </div>
     </div>
-
 </body>
 </html>
