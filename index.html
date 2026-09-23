@@ -3,23 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Watch Party - ElWalis</title>
+
     <link rel="stylesheet" href="style.css">
+
+    <!-- Amazon IVS Web Player -->
+    <script src="https://player.live-video.net/1.56.1/amazon-ivs-player.min.js"></script>
 </head>
+
 <body>
+
     <div class="app-container">
-        <!-- Contenedor del Reproductor (Kick / IVS) -->
+
+        <!-- =========================
+             REPRODUCTOR
+        ========================== -->
         <div class="player-section">
+
             <div id="video-container">
-                <!-- Aquí puedes incrustar el iframe del reproductor o el reproductor web -->
-                <iframe src="https://player.kick.com/TUSCANAL"</iframe>
+
+                <video
+                    id="video-player"
+                    playsinline
+                    controls
+                    autoplay
+                ></video>
+
             </div>
+
         </div>
 
-        <!-- Contenedor del Chat -->
+
+        <!-- =========================
+             CHAT
+        ========================== -->
         <div class="chat-section">
-            <iframe src="https://kick.com/TUSCANAL/chatroom" frameborder="0"></iframe>
+
+            <iframe
+                src="https://kick.com/TUSCANAL/chatroom"
+                frameborder="0"
+                allowfullscreen>
+            </iframe>
+
         </div>
+
     </div>
+
+
+    <!-- =========================
+         REPRODUCTOR IVS
+    ========================== -->
+    <script>
+
+        const PLAYBACK_URL =
+            "https://7c37b557078d.us-east-1.playback.live-video.net/api/video/v1/us-east-1.885191629510.channel.4hpYAizRvJeM.m3u8";
+
+
+        const videoElement =
+            document.getElementById("video-player");
+
+
+        /*
+         * Comprobar compatibilidad
+         */
+        if (IVSPlayer.isPlayerSupported) {
+
+            /*
+             * Crear reproductor IVS
+             */
+            const player = IVSPlayer.create();
+
+
+            /*
+             * Conectar IVS con nuestro elemento <video>
+             */
+            player.attachHTMLVideoElement(videoElement);
+
+
+            /*
+             * Cargar el stream
+             */
+            player.load(PLAYBACK_URL);
+
+
+            /*
+             * Intentar iniciar reproducción
+             */
+            player.play().catch(error => {
+
+                console.log(
+                    "La reproducción automática fue bloqueada por el navegador.",
+                    error
+                );
+
+            });
+
+
+            /*
+             * Eventos
+             */
+
+            player.addEventListener(
+                IVSPlayer.PlayerState.PLAYING,
+                () => {
+
+                    console.log("Stream reproduciéndose");
+
+                }
+            );
+
+
+            player.addEventListener(
+                IVSPlayer.PlayerState.BUFFERING,
+                () => {
+
+                    console.log("Buffering...");
+
+                }
+            );
+
+
+            player.addEventListener(
+                IVSPlayer.PlayerState.READY,
+                () => {
+
+                    console.log("Reproductor IVS listo");
+
+                }
+            );
+
+
+            player.addEventListener(
+                IVSPlayer.PlayerEventType.ERROR,
+                (error) => {
+
+                    console.error(
+                        "Error del reproductor IVS:",
+                        error
+                    );
+
+                }
+            );
+
+        } else {
+
+            console.error(
+                "Este navegador no es compatible con Amazon IVS."
+            );
+
+        }
+
+    </script>
+
 </body>
 </html>
