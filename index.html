@@ -8,7 +8,7 @@
   <!-- SDK del Reproductor de Amazon IVS -->
   <script src="https://live-video.net"></script>
 
-  <!-- Importar Fuentes de Íconos (FontAwesome para el logo de Twitch y Kick) -->
+  <!-- Importar Fuentes de Íconos (FontAwesome) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
@@ -40,44 +40,56 @@
       height: 100%;
     }
     .social-links {
-      padding: 20px;
+      padding: 15px 20px;
       background: #18181c;
       display: flex;
       gap: 15px;
       align-items: center;
+      flex-wrap: wrap;
     }
     .social-btn {
-      padding: 10px 20px;
-      border-radius: 8px; /* Esquinas más redondeadas */
+      padding: 10px 18px;
+      border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
       display: flex;
       align-items: center;
-      gap: 10px; /* Espacio entre ícono y texto */
-      font-size: 16px;
-      transition: transform 0.2s; /* Pequeña animación al pasar el mouse */
+      gap: 8px;
+      font-size: 15px;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
     .social-btn:hover {
-      transform: translateY(-2px); /* Efecto de elevación */
+      transform: translateY(-2px);
     }
 
-    /* Estilo Botón Kick (Verde Neón) */
+    /* Estilos y Efecto de Brillo (Neón) por cada plataforma */
+    .btn-youtube { 
+      background-color: #ff0000; 
+      color: #fff; 
+      box-shadow: 0 0 12px rgba(255, 0, 0, 0.5);
+    }
+    .btn-youtube:hover { box-shadow: 0 0 18px rgba(255, 0, 0, 0.8); }
+
     .btn-kick { 
       background-color: #53fc18; 
       color: #000; 
+      box-shadow: 0 0 12px rgba(83, 252, 24, 0.5);
     }
+    .btn-kick:hover { box-shadow: 0 0 18px rgba(83, 252, 24, 0.8); }
 
-    /* Estilo Botón Twitch (Morado) */
+    .btn-patreon { 
+      background-color: #ff424d; 
+      color: #fff; 
+      box-shadow: 0 0 12px rgba(255, 66, 77, 0.5);
+    }
+    .btn-patreon:hover { box-shadow: 0 0 18px rgba(255, 66, 77, 0.8); }
+
     .btn-twitch { 
       background-color: #9146FF; 
       color: #fff; 
+      box-shadow: 0 0 12px rgba(145, 70, 255, 0.5);
     }
-    
-    /* Estilo Botón Twitter (Azul) */
-    .btn-twitter { 
-      background-color: #1da1f2; 
-      color: #fff; 
-    }
+    .btn-twitch:hover { box-shadow: 0 0 18px rgba(145, 70, 255, 0.8); }
 
     .chat-container {
       flex: 1;
@@ -101,19 +113,24 @@
         <video id="video-player" controls playsinline></video>
       </div>
       <div class="social-links">
-        <!-- BOTÓN KICK: Se agregó la clase .btn-kick y el ícono de FontAwesome -->
+        <!-- Botón YouTube -->
+        <a href="https://youtube.com/@TU_USUARIO" target="_blank" class="social-btn btn-youtube">
+          <i class="fa-brands fa-youtube"></i> YouTube
+        </a>
+        
+        <!-- Botón Kick -->
         <a href="https://kick.com/TU_USUARIO" target="_blank" class="social-btn btn-kick">
           <i class="fa-solid fa-k"></i> Suscribirse
         </a>
         
-        <!-- BOTÓN TWITCH: Se agregó la clase .btn-twitch y el ícono de FontAwesome -->
-        <a href="https://twitch.tv/TU_USUARIO" target="_blank" class="social-btn btn-twitch">
-          <i class="fa-brands fa-twitch"></i> Suscribirse
+        <!-- Botón Patreon -->
+        <a href="https://patreon.com/TU_USUARIO" target="_blank" class="social-btn btn-patreon">
+          <i class="fa-brands fa-patreon"></i> Patreon
         </a>
 
-        <!-- BOTÓN TWITTER: Se mantuvo el estilo previo pero se mejoró con la clase .social-btn -->
-        <a href="https://x.com/TU_USUARIO" target="_blank" class="social-btn btn-twitter">
-          <i class="fa-brands fa-twitter"></i> Síguenos
+        <!-- Botón Twitch -->
+        <a href="https://twitch.tv/TU_USUARIO" target="_blank" class="social-btn btn-twitch">
+          <i class="fa-brands fa-twitch"></i> Suscribirse <i class="fa-solid fa-video" style="font-size: 11px; opacity: 0.8;"></i>
         </a>
       </div>
     </div>
@@ -133,7 +150,7 @@
       const player = IVSPlayer.create();
       player.attachHTMLVideoElement(document.getElementById('video-player'));
       
-      // --- RECUERDA EDITAR AQUÍ CON TU URL DE AWS IVS ---
+      // RECUERDA COLOCAR TU URL DE REPRODUCCIÓN DE AWS IVS AQUÍ:
       const playbackUrl = "https://TU_ID_PLAYBACK.codes.us-east-1.playback.live-video.net/api/video/v1/us-east-1.CUENTA.channel.M3U8_ID.m3u8";
       
       player.load(playbackUrl);
