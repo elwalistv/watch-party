@@ -1,293 +1,114 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Watch Party - ElWalis</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Amazon IVS Web Player -->
-    <script src="https://player.live-video.net/1.56.1/amazon-ivs-player.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Stream - elwalis.com</title>
+  
+  <!-- SDK del Reproductor de Amazon IVS -->
+  <script src="https://live-video.net"></script>
+  
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    .layout-container {
+      display: flex;
+      flex-wrap: wrap;
+      height: 100vh;
+    }
+    .main-content {
+      flex: 3;
+      display: flex;
+      flex-direction: column;
+      min-width: 300px;
+    }
+    .video-container {
+      position: relative;
+      width: 100%;
+      background: #000;
+      aspect-ratio: 16 / 9;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+    }
+    .social-links {
+      padding: 20px;
+      background: #18181c;
+      display: flex;
+      gap: 15px;
+    }
+    .social-btn {
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+    }
+    .btn-kick { background: #53fc18; color: #000; }
+    .btn-twitter { background: #1da1f2; }
+    .btn-instagram { background: #e1306c; }
+    
+    .chat-container {
+      flex: 1;
+      min-width: 340px;
+      border-left: 1px solid #2d2d34;
+      background: #19191c;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
 </head>
-
 <body>
 
-    <div class="app">
-
-        <!-- =====================================
-             HEADER
-        ====================================== -->
-        <header class="topbar">
-
-            <div class="brand">
-                <div class="brand-logo">
-                    EW
-                </div>
-
-                <div class="brand-info">
-                    <h1>ElWalis</h1>
-                    <span>WATCH PARTY</span>
-                </div>
-            </div>
-
-            <div class="live-status">
-                <span class="live-dot"></span>
-                EN VIVO
-            </div>
-
-        </header>
-
-
-        <!-- =====================================
-             CONTENIDO PRINCIPAL
-        ====================================== -->
-        <main class="main-content">
-
-            <!-- =================================
-                 VIDEO
-            ================================== -->
-            <section class="video-section">
-
-                <div class="video-wrapper">
-
-                    <video
-                        id="video-player"
-                        playsinline
-                        controls
-                        autoplay>
-                    </video>
-
-                    <!-- Overlay -->
-                    <div id="loading-overlay" class="loading-overlay">
-
-                        <div class="loader"></div>
-
-                        <span>
-                            Conectando al directo...
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =================================
-                     INFORMACIÓN DEL STREAM
-                ================================== -->
-                <div class="stream-info">
-
-                    <div class="stream-title">
-
-                        <span class="live-badge">
-                            EN VIVO
-                        </span>
-
-                        <h2>
-                            ElWalis Watch Party
-                        </h2>
-
-                    </div>
-
-                    <div class="stream-description">
-                        Disfruta del directo y comparte el momento con la comunidad.
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================
-                 CHAT
-            ================================== -->
-            <aside class="chat-section">
-
-                <div class="chat-header">
-
-                    <div class="chat-title">
-
-                        <span class="chat-icon">
-                            💬
-                        </span>
-
-                        <span>
-                            CHAT EN VIVO
-                        </span>
-
-                    </div>
-
-                    <div class="chat-online">
-                        ● LIVE
-                    </div>
-
-                </div>
-
-
-                <div class="chat-container">
-
-                    <iframe
-                        src="https://kick.com/popout/elwalistv/chat"
-                        frameborder="0"
-                        scrolling="no"
-                        allowfullscreen>
-                    </iframe>
-
-                </div>
-
-            </aside>
-
-        </main>
-
-
-        <!-- =====================================
-             FOOTER
-        ====================================== -->
-        <footer class="footer">
-
-            <span>
-                © 2026 ElWalis
-            </span>
-
-            <span>
-                Watch Party
-            </span>
-
-        </footer>
-
+  <div class="layout-container">
+    <!-- Sección Izquierda: Video + Redes -->
+    <div class="main-content">
+      <div class="video-container">
+        <!-- Elemento de video para Amazon IVS -->
+        <video id="video-player" controls playsinline></video>
+      </div>
+      <div class="social-links">
+        <a href="https://kick.com/TU_USUARIO" target="_blank" class="social-btn btn-kick">Kick Profile</a>
+        <a href="https://x.com/TU_USUARIO" target="_blank" class="social-btn btn-twitter">Twitter / X</a>
+        <a href="https://instagram.com/TU_USUARIO" target="_blank" class="social-btn btn-instagram">Instagram</a>
+      </div>
     </div>
 
+    <!-- Sección Derecha: Chat Incrustado de Kick -->
+    <div class="chat-container">
+      <!-- Reemplaza TU_USUARIO por tu nombre de canal exacto en Kick -->
+      <iframe src="https://kick.com/popout/TU_USUARIO/chat"></iframe>
+    </div>
+  </div>
 
-    <!-- =========================================
-         AMAZON IVS
-    ========================================== -->
-    <script>
+  <script>
+    (function() {
+      // 1. Verificar compatibilidad del SDK de IVS
+      if (!IVSPlayer.isPlayerSupported) {
+        console.error("El reproductor de Amazon IVS no es compatible con este navegador.");
+        return;
+      }
 
-        const PLAYBACK_URL =
-            "https://7c37b557078d.us-east-1.playback.live-video.net/api/video/v1/us-east-1.885191629510.channel.4hpYAizRvJeM.m3u8";
+      // 2. Inicializar el reproductor acoplándolo al tag <video>
+      const player = IVSPlayer.create();
+      player.attachHTMLVideoElement(document.getElementById('video-player'));
 
-
-        const video =
-            document.getElementById("video-player");
-
-
-        const loadingOverlay =
-            document.getElementById("loading-overlay");
-
-
-        /*
-         * Comprobar compatibilidad
-         */
-        if (IVSPlayer.isPlayerSupported) {
-
-            const player =
-                IVSPlayer.create();
-
-
-            /*
-             * Conectar IVS con nuestro <video>
-             */
-            player.attachHTMLVideoElement(video);
-
-
-            /*
-             * Cargar stream
-             */
-            player.load(PLAYBACK_URL);
-
-
-            /*
-             * Intentar reproducir
-             */
-            player.play().catch((error) => {
-
-                console.log(
-                    "El navegador bloqueó el autoplay.",
-                    error
-                );
-
-            });
-
-
-            /*
-             * STREAM LISTO
-             */
-            player.addEventListener(
-                IVSPlayer.PlayerState.READY,
-                () => {
-
-                    console.log(
-                        "Amazon IVS listo."
-                    );
-
-                }
-            );
-
-
-            /*
-             * STREAM REPRODUCIÉNDOSE
-             */
-            player.addEventListener(
-                IVSPlayer.PlayerState.PLAYING,
-                () => {
-
-                    console.log(
-                        "Stream reproduciéndose."
-                    );
-
-                    loadingOverlay.classList.add(
-                        "hidden"
-                    );
-
-                }
-            );
-
-
-            /*
-             * BUFFERING
-             */
-            player.addEventListener(
-                IVSPlayer.PlayerState.BUFFERING,
-                () => {
-
-                    console.log(
-                        "Buffering..."
-                    );
-
-                }
-            );
-
-
-            /*
-             * ERROR
-             */
-            player.addEventListener(
-                IVSPlayer.PlayerEventType.ERROR,
-                (error) => {
-
-                    console.error(
-                        "Error Amazon IVS:",
-                        error
-                    );
-
-                    loadingOverlay.classList.remove(
-                        "hidden"
-                    );
-
-                }
-            );
-
-
-        } else {
-
-            console.error(
-                "Este navegador no soporta Amazon IVS."
-            );
-
-        }
-
-    </script>
+      // 3. Cargar la URL de reproducción (.m3u8) provista por tu consola AWS IVS
+      const playbackUrl = "https://TU_ID_PLAYBACK.codes.us-east-1.playback.live-video.net/api/video/v1/us-east-1.CUENTA.channel.M3U8_ID.m3u8";
+      player.load(playbackUrl);
+      
+      // 4. Iniciar la reproducción automáticamente
+      player.play();
+    })();
+  </script>
 
 </body>
 </html>
