@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ELWALISTV - Watch Party Pro</title>
+  <title>ELWALISTV - Watch Party</title>
   
   <!-- SDK del Reproductor de Amazon IVS -->
   <script src="https://live-video.net"></script>
@@ -12,23 +12,49 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
-    /* --- Estilos Base (Negro Total) --- */
     body {
       margin: 0;
-      background-color: #000; /* Fondo negro absoluto */
+      background-color: #0b0b0e;
       color: #fff;
       font-family: Arial, sans-serif;
       height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden; /* Evita barras de desplazamiento */
+      overflow: hidden;
     }
 
-    /* --- Contenedor Principal del Video (Ocupa casi toda la pantalla) --- */
-    .video-wrapper {
-      flex: 1; /* Se expande para ocupar el espacio disponible */
+    /* --- Barra Superior (Ej: "VIENDO: ...") --- */
+    .top-header {
+      background-color: #0b0b0e;
+      padding: 10px 20px;
+      font-weight: bold;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid #1f1f23;
+    }
+    .top-header span {
+      color: #adadb8;
+    }
+
+    /* --- Contenedor General de la Interfaz (Dos Columnas) --- */
+    .app-container {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 41px);
+    }
+
+    /* --- Columna Izquierda: Video + Barra de Controles + Redes --- */
+    .left-column {
+      flex: 3;
+      display: flex;
+      flex-direction: column;
+      background-color: #000;
       position: relative;
-      width: 100%;
+    }
+
+    .video-container {
+      flex: 1;
+      position: relative;
       background: #000;
       display: flex;
       justify-content: center;
@@ -38,201 +64,181 @@
     video {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Mantiene la relación de aspecto sin recortar */
+      object-fit: contain;
     }
 
-    /* --- Barra de Controles de Usuario (Debajo del video) --- */
-    .user-controls-bar {
-      width: 100%;
-      height: 50px;
-      background-color: #111; /* Gris muy oscuro */
+    /* Barra de Controles Estilo Reproductor Profesional */
+    .player-controls-bar {
+      height: 45px;
+      background-color: #0e0e10;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
-      box-sizing: border-box;
-      border-top: 1px solid #333;
+      padding: 0 15px;
+      border-top: 1px solid #1f1f23;
     }
 
-    .controls-left, .controls-right {
+    .controls-group {
       display: flex;
       align-items: center;
       gap: 15px;
     }
 
-    .control-icon {
-      color: #aaa;
-      font-size: 18px;
-      cursor: pointer;
+    .control-btn {
+      color: #efeff1;
       background: none;
       border: none;
+      cursor: pointer;
+      font-size: 16px;
       padding: 0;
       transition: color 0.2s;
     }
-
-    .control-icon:hover {
-      color: #fff;
+    .control-btn:hover {
+      color: #9146FF;
     }
 
-    /* Indicador de En Vivo (Live Indicator) */
-    .live-badge {
-      background-color: #e50914; /* Rojo estilo Netflix/YouTube */
-      color: #fff;
-      padding: 2px 6px;
-      border-radius: 4px;
+    .live-indicator {
+      background-color: #eb0400;
+      color: white;
+      font-size: 11px;
       font-weight: bold;
-      font-size: 12px;
-      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
     }
 
-    /* Control de Volumen */
-    .volume-control-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
     .volume-slider {
-      width: 80px;
+      width: 70px;
       cursor: pointer;
     }
 
-    /* --- Módulo de Enlaces de Redes Sociales (Debajo de los controles) --- */
-    .social-links-container {
-      background-color: #18181c; /* Mismo gris que la barra de controles */
-      padding: 15px 20px;
+    /* Fila de Redes Sociales debajo del video */
+    .social-links-row {
+      background-color: #18181b;
+      padding: 12px 20px;
       display: flex;
-      justify-content: flex-start; /* Alineados a la izquierda */
-      gap: 15px;
-      border-top: 1px solid #333;
+      gap: 12px;
+      align-items: center;
+      border-top: 1px solid #2d2d35;
     }
 
     .social-btn {
-      padding: 10px 18px;
-      border-radius: 8px;
+      padding: 8px 16px;
+      border-radius: 6px;
       text-decoration: none;
       font-weight: bold;
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 15px;
+      font-size: 14px;
       transition: transform 0.2s, box-shadow 0.2s;
     }
-
     .social-btn:hover {
       transform: translateY(-2px);
     }
 
-    /* Estilos y Brillos de Neón (Tal como pediste) */
-    .btn-youtube { 
-      background-color: #ff0000; color: #fff; 
-      box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
-    }
-    .btn-youtube:hover { box-shadow: 0 0 16px rgba(255, 0, 0, 0.7); }
+    /* Brillos de Neón exactos */
+    .btn-youtube { background-color: #ff0000; color: #fff; box-shadow: 0 0 10px rgba(255, 0, 0, 0.4); }
+    .btn-kick { background-color: #53fc18; color: #000; box-shadow: 0 0 10px rgba(83, 252, 24, 0.4); }
+    .btn-patreon { background-color: #ff424d; color: #fff; box-shadow: 0 0 10px rgba(255, 66, 77, 0.4); }
+    .btn-twitch { background-color: #9146FF; color: #fff; box-shadow: 0 0 10px rgba(145, 70, 255, 0.4); }
 
-    .btn-kick { 
-      background-color: #53fc18; color: #000; 
-      box-shadow: 0 0 10px rgba(83, 252, 24, 0.4);
+    /* --- Columna Derecha: Chat Fijo de Kick --- */
+    .right-column-chat {
+      flex: 1;
+      min-width: 340px;
+      max-width: 400px;
+      background-color: #18181b;
+      border-left: 1px solid #2d2d35;
+      display: flex;
+      flex-direction: column;
     }
-    .btn-kick:hover { box-shadow: 0 0 16px rgba(83, 252, 24, 0.7); }
 
-    .btn-patreon { 
-      background-color: #ff424d; color: #fff; 
-      box-shadow: 0 0 10px rgba(255, 66, 77, 0.4);
+    .chat-header {
+      padding: 12px 15px;
+      background-color: #0e0e10;
+      font-weight: bold;
+      font-size: 14px;
+      border-bottom: 1px solid #2d2d35;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .btn-patreon:hover { box-shadow: 0 0 16px rgba(255, 66, 77, 0.7); }
 
-    .btn-twitch { 
-      background-color: #9146FF; color: #fff; 
-      box-shadow: 0 0 10px rgba(145, 70, 255, 0.4);
-    }
-    .btn-twitch:hover { box-shadow: 0 0 16px rgba(145, 70, 255, 0.7); }
-
-    /* Botón de Opciones (Chat/Notis) */
-    .chat-toggle-btn {
-        background: #333;
-        color: #fff;
-        padding: 5px 10px;
-        border-radius: 4px;
-        border: none;
-        cursor: pointer;
-        font-size: 12px;
-        margin-left: auto; /* Empuja este botón a la derecha en controls-right */
-    }
-    .chat-toggle-btn:hover {
-        background: #444;
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      flex: 1;
     }
   </style>
 </head>
 <body>
 
-  <!-- Capa 1: Reproductor de Video (Ocupa todo el alto) -->
-  <div class="video-wrapper">
-    <video id="video-player" playsinline></video>
-    <!-- Aquí se incrustará el chat de Kick o las notificaciones. Por defecto está oculto -->
-    <div class="overlay-container" style="display: none;">
-        <iframe id="overlay-iframe" src=""></iframe>
-    </div>
+  <!-- Encabezado Superior -->
+  <div class="top-header">
+    <span>VIENDO:</span> TRANSMISIÓN EN DIRECTO - ELWALISTV
   </div>
 
-  <!-- Capa 2: Barra de Controles de Usuario (Nueva Ubicación) -->
-  <div class="user-controls-bar">
-    <!-- Controles Izquierda -->
-    <div class="controls-left">
-      <button class="control-icon" id="btn-play-pause"><i class="fas fa-play"></i></button>
-      <div class="volume-control-group">
-        <button class="control-icon" id="btn-mute"><i class="fas fa-volume-up"></i></button>
-        <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.1" value="1">
-      </div>
-    </div>
+  <div class="app-container">
     
-    <!-- Controles Centro (Live + Reloj) -->
-    <div class="controls-center">
-      <span class="live-badge">LIVE</span>
-      <span id="stream-clock" style="font-size: 13px; color: #888; margin-left: 10px;">00:00</span>
-    </div>
-
-    <!-- Controles Derecha -->
-    <div class="controls-right">
-        <!-- Botones de Toggle para Chat o Notis -->
-        <button class="chat-toggle-btn" id="toggle-kick-chat" data-user="ELWALISTV">
-            <i class="fa-solid fa-k"></i> CHAT ON
-        </button>
-        <!-- O podrías tener un botón genérico: <button class="chat-toggle-btn" id="toggle-chat">Chat/Notis ON/OFF</button> -->
+    <!-- COLUMNA IZQUIERDA: Video + Controles + Redes -->
+    <div class="left-column">
       
-      <button class="control-icon" id="btn-chromecast"><i class="fab fa-chromecast"></i></button>
-      <button class="control-icon" id="btn-fullscreen"><i class="fas fa-expand"></i></button>
+      <div class="video-container">
+        <video id="video-player" playsinline></video>
+      </div>
+
+      <!-- Barra de controles del reproductor -->
+      <div class="player-controls-bar">
+        <div class="controls-group">
+          <button class="control-btn" id="btn-play"><i class="fas fa-play" id="play-icon"></i></button>
+          <button class="control-btn" id="btn-mute"><i class="fas fa-volume-up" id="mute-icon"></i></button>
+          <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.1" value="1">
+          <span class="live-indicator">LIVE</span>
+        </div>
+
+        <div class="controls-group">
+          <button class="control-btn" id="btn-chromecast" title="Transmitir"><i class="fab fa-chromecast"></i></button>
+          <button class="control-btn" id="btn-fullscreen" title="Pantalla completa"><i class="fas fa-expand"></i></button>
+        </div>
+      </div>
+
+      <!-- Fila de enlaces brillantes de redes sociales -->
+      <div class="social-links-row">
+        <a href="https://youtube.com/@ELWALISTV" target="_blank" class="social-btn btn-youtube">
+          <i class="fa-brands fa-youtube"></i> YouTube
+        </a>
+        <a href="https://kick.com/ELWALISTV" target="_blank" class="social-btn btn-kick">
+          <i class="fa-solid fa-k"></i> Suscribirse
+        </a>
+        <a href="https://patreon.com/ELWALISTV" target="_blank" class="social-btn btn-patreon">
+          <i class="fa-brands fa-patreon"></i> Patreon
+        </a>
+        <a href="https://twitch.tv/ELWALISTV" target="_blank" class="social-btn btn-twitch">
+          <i class="fa-brands fa-twitch"></i> Suscribirse <i class="fa-solid fa-video" style="font-size: 10px;"></i>
+        </a>
+      </div>
+
     </div>
+
+    <!-- COLUMNA DERECHA: Chat de Kick Fijo -->
+    <div class="right-column-chat">
+      <div class="chat-header">
+        <span>Chat de la transmisión</span>
+        <i class="fa-solid fa-comments" style="color: #53fc18;"></i>
+      </div>
+      <!-- Chat incrustado oficial de popout de Kick -->
+      <iframe src="https://kick.com/popout/ELWALISTV/chat"></iframe>
+    </div>
+
   </div>
 
-  <!-- Capa 3: Módulo de Enlaces de Redes Sociales (Debajo de los controles) -->
-  <div class="social-links-container">
-    <!-- Botón YouTube (Brillante) -->
-    <a href="https://youtube.com/@ELWALISTV" target="_blank" class="social-btn btn-youtube">
-        <i class="fa-brands fa-youtube"></i> YouTube
-    </a>
-    
-    <!-- Botón Kick (Brillante) -->
-    <a href="https://kick.com/ELWALISTV" target="_blank" class="social-btn btn-kick">
-        <i class="fa-solid fa-k"></i> Seguir en Kick
-    </a>
-    
-    <!-- Botón Patreon (Brillante) -->
-    <a href="https://patreon.com/ELWALISTV" target="_blank" class="social-btn btn-patreon">
-        <i class="fa-brands fa-patreon"></i> Patreon
-    </a>
-
-    <!-- Botón Twitch (Brillante) -->
-    <a href="https://twitch.tv/ELWALISTV" target="_blank" class="social-btn btn-twitch">
-        <i class="fa-brands fa-twitch"></i> Suscribirse <i class="fa-solid fa-video" style="font-size: 11px; opacity: 0.8;"></i>
-    </a>
-  </div>
-
-  <!-- --- JavaScript --- -->
+  <!-- Script de Control del Reproductor IVS -->
   <script>
     (function() {
-      // Verificar compatibilidad
       if (!IVSPlayer.isPlayerSupported) {
-        console.error("El SDK de IVS no es compatible.");
+        console.error("El SDK de IVS no es compatible con este navegador.");
         return;
       }
 
@@ -240,108 +246,64 @@
       const videoElement = document.getElementById('video-player');
       player.attachHTMLVideoElement(videoElement);
       
-      // --- RECUERDA COLOCAR TU URL DE REPRODUCCIÓN DE AWS IVS AQUÍ: ---
+      // --- COLOCA TU URL DE REPRODUCCIÓN DE AWS IVS AQUÍ: ---
       const playbackUrl = "https://TU_ID_PLAYBACK.codes.us-east-1.playback.live-video.net/api/video/v1/us-east-1.CUENTA.channel.M3U8_ID.m3u8";
+      
       player.load(playbackUrl);
-      player.play(); // Iniciar automáticamente
+      player.play();
 
-      // --- Lógica de Controles ---
-      const btnPlayPause = document.getElementById('btn-play-pause');
-      const iconPlayPause = btnPlayPause.querySelector('i');
-      btnPlayPause.addEventListener('click', () => {
+      // Botón Play / Pause
+      const btnPlay = document.getElementById('btn-play');
+      const playIcon = document.getElementById('play-icon');
+      btnPlay.addEventListener('click', () => {
         if (player.isPlaying()) {
-            player.pause();
-            iconPlayPause.classList.replace('fa-pause', 'fa-play');
+          player.pause();
+          playIcon.classList.replace('fa-pause', 'fa-play');
         } else {
-            player.play();
-            iconPlayPause.classList.replace('fa-play', 'fa-pause');
+          player.play();
+          playIcon.classList.replace('fa-play', 'fa-pause');
         }
       });
 
+      // Control de Volumen y Mute
       const btnMute = document.getElementById('btn-mute');
-      const iconMute = btnMute.querySelector('i');
+      const muteIcon = document.getElementById('mute-icon');
       const volumeSlider = document.getElementById('volume-slider');
+      
       btnMute.addEventListener('click', () => {
-        const muted = player.isMuted();
-        player.setMuted(!muted);
-        iconMute.classList.toggle('fa-volume-up', muted);
-        iconMute.classList.toggle('fa-volume-mute', !muted);
-      });
-      volumeSlider.addEventListener('input', (e) => {
-        const vol = parseFloat(e.target.value);
-        player.setVolume(vol);
-        if (vol === 0) {
-            iconMute.classList.replace('fa-volume-up', 'fa-volume-mute');
-        } else {
-            iconMute.classList.replace('fa-volume-mute', 'fa-volume-up');
-        }
+        const isMuted = player.isMuted();
+        player.setMuted(!isMuted);
+        muteIcon.classList.toggle('fa-volume-up', isMuted);
+        muteIcon.classList.toggle('fa-volume-mute', !isMuted);
       });
 
-      // Simular el reloj del stream (tiempo desde inicio)
-      const clockSpan = document.getElementById('stream-clock');
-      let seconds = 0;
-      setInterval(() => {
-        if (player.isPlaying()) {
-            seconds++;
-            const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
-            const secs = String(seconds % 60).padStart(2, '0');
-            clockSpan.textContent = `${mins}:${secs}`;
+      volumeSlider.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        player.setVolume(val);
+        if (val === 0) {
+          muteIcon.classList.replace('fa-volume-up', 'fa-volume-mute');
+        } else {
+          muteIcon.classList.replace('fa-volume-mute', 'fa-volume-up');
         }
-      }, 1000);
+      });
 
       // Pantalla Completa
       const btnFullscreen = document.getElementById('btn-fullscreen');
       btnFullscreen.addEventListener('click', () => {
         if (document.fullscreenElement) {
-            document.exitFullscreen();
+          document.exitFullscreen();
         } else {
-            videoElement.parentElement.requestFullscreen(); // Hace fullscreen al contenedor
+          document.documentElement.requestFullscreen();
         }
       });
 
-      // Chromecast (API Nativa del Navegador - se activa si el navegador lo soporta y detecta dispositivo)
-      const btnChromecast = document.getElementById('btn-chromecast');
-      if (window.cast && window.cast.framework.CastContext) {
-        btnChromecast.style.display = 'block'; // Mostrar si hay soporte
-        btnChromecast.addEventListener('click', () => {
+      // Botón Chromecast (Llamada nativa)
+      document.getElementById('btn-chromecast').addEventListener('click', () => {
+        if (window.cast && window.cast.framework) {
           cast.framework.CastContext.getInstance().requestSession();
-        });
-      } else {
-          btnChromecast.style.display = 'block'; // Dejarlo visible, el navegador maneja el prompt
-      }
-
-      // Lógica para Apagar/Encender el Chat (Reutilizando la overlay-container)
-      const toggleChatBtn = document.getElementById('toggle-kick-chat');
-      const chatIframe = document.getElementById('overlay-iframe');
-      const chatOverlay = document.querySelector('.overlay-container');
-      const channelName = toggleChatBtn.getAttribute('data-user');
-
-      toggleChatBtn.addEventListener('click', () => {
-          if (chatOverlay.style.display === 'none') {
-              // Configurar Kick Chat Popout en el iframe si no lo está
-              if(chatIframe.src !== `https://kick.com/popout/${channelName}/chat`) {
-                  chatIframe.src = `https://kick.com/popout/${channelName}/chat`;
-              }
-              chatOverlay.style.display = 'block'; // Mostrar
-              toggleChatBtn.textContent = 'OCULTAR CHAT';
-              videoElement.style.objectFit = 'cover'; // O ajusta según prefieras que se vea el video con el chat al lado
-          } else {
-              chatOverlay.style.display = 'none'; // Ocultar
-              toggleChatBtn.innerHTML = '<i class="fa-solid fa-k"></i> CHAT ON';
-              videoElement.style.objectFit = 'contain'; // Vuelve a centrar el video
-          }
-      });
-
-      // Ocultar controles automáticamente tras unos segundos de inactividad
-      let controlsTimeout;
-      const controlsBar = document.querySelector('.user-controls-bar');
-      const hideControls = () => {
-          controlsBar.style.opacity = '0';
-      };
-      window.addEventListener('mousemove', () => {
-          controlsBar.style.opacity = '1';
-          clearTimeout(controlsTimeout);
-          controlsTimeout = setTimeout(hideControls, 4000);
+        } else {
+          alert("Asegúrate de usar Google Chrome y estar en una red compatible para transmitir a Chromecast.");
+        }
       });
 
     })();
