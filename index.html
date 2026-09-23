@@ -14,54 +14,166 @@
 
 <body>
 
-    <div class="app-container">
+    <div class="app">
 
-        <!-- =========================
-             REPRODUCTOR
-        ========================== -->
-        <div class="player-section">
+        <!-- =====================================
+             HEADER
+        ====================================== -->
+        <header class="topbar">
 
-            <div id="video-container">
+            <div class="brand">
+                <div class="brand-logo">
+                    EW
+                </div>
 
-                <video
-                    id="video-player"
-                    playsinline
-                    controls
-                    autoplay
-                ></video>
-
+                <div class="brand-info">
+                    <h1>ElWalis</h1>
+                    <span>WATCH PARTY</span>
+                </div>
             </div>
 
-        </div>
+            <div class="live-status">
+                <span class="live-dot"></span>
+                EN VIVO
+            </div>
+
+        </header>
 
 
-        <!-- =========================
-             CHAT
-        ========================== -->
-        <div class="chat-section">
+        <!-- =====================================
+             CONTENIDO PRINCIPAL
+        ====================================== -->
+        <main class="main-content">
 
-            <iframe
-                src="https://kick.com/TUSCANAL/chatroom"
-                frameborder="0"
-                allowfullscreen>
-            </iframe>
+            <!-- =================================
+                 VIDEO
+            ================================== -->
+            <section class="video-section">
 
-        </div>
+                <div class="video-wrapper">
+
+                    <video
+                        id="video-player"
+                        playsinline
+                        controls
+                        autoplay>
+                    </video>
+
+                    <!-- Overlay -->
+                    <div id="loading-overlay" class="loading-overlay">
+
+                        <div class="loader"></div>
+
+                        <span>
+                            Conectando al directo...
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================
+                     INFORMACIÓN DEL STREAM
+                ================================== -->
+                <div class="stream-info">
+
+                    <div class="stream-title">
+
+                        <span class="live-badge">
+                            EN VIVO
+                        </span>
+
+                        <h2>
+                            ElWalis Watch Party
+                        </h2>
+
+                    </div>
+
+                    <div class="stream-description">
+                        Disfruta del directo y comparte el momento con la comunidad.
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 CHAT
+            ================================== -->
+            <aside class="chat-section">
+
+                <div class="chat-header">
+
+                    <div class="chat-title">
+
+                        <span class="chat-icon">
+                            💬
+                        </span>
+
+                        <span>
+                            CHAT EN VIVO
+                        </span>
+
+                    </div>
+
+                    <div class="chat-online">
+                        ● LIVE
+                    </div>
+
+                </div>
+
+
+                <div class="chat-container">
+
+                    <iframe
+                        src="https://kick.com/popout/elwalistv/chat"
+                        frameborder="0"
+                        scrolling="no"
+                        allowfullscreen>
+                    </iframe>
+
+                </div>
+
+            </aside>
+
+        </main>
+
+
+        <!-- =====================================
+             FOOTER
+        ====================================== -->
+        <footer class="footer">
+
+            <span>
+                © 2026 ElWalis
+            </span>
+
+            <span>
+                Watch Party
+            </span>
+
+        </footer>
 
     </div>
 
 
-    <!-- =========================
-         REPRODUCTOR IVS
-    ========================== -->
+    <!-- =========================================
+         AMAZON IVS
+    ========================================== -->
     <script>
 
         const PLAYBACK_URL =
             "https://7c37b557078d.us-east-1.playback.live-video.net/api/video/v1/us-east-1.885191629510.channel.4hpYAizRvJeM.m3u8";
 
 
-        const videoElement =
+        const video =
             document.getElementById("video-player");
+
+
+        const loadingOverlay =
+            document.getElementById("loading-overlay");
 
 
         /*
@@ -69,31 +181,29 @@
          */
         if (IVSPlayer.isPlayerSupported) {
 
+            const player =
+                IVSPlayer.create();
+
+
             /*
-             * Crear reproductor IVS
+             * Conectar IVS con nuestro <video>
              */
-            const player = IVSPlayer.create();
+            player.attachHTMLVideoElement(video);
 
 
             /*
-             * Conectar IVS con nuestro elemento <video>
-             */
-            player.attachHTMLVideoElement(videoElement);
-
-
-            /*
-             * Cargar el stream
+             * Cargar stream
              */
             player.load(PLAYBACK_URL);
 
 
             /*
-             * Intentar iniciar reproducción
+             * Intentar reproducir
              */
-            player.play().catch(error => {
+            player.play().catch((error) => {
 
                 console.log(
-                    "La reproducción automática fue bloqueada por el navegador.",
+                    "El navegador bloqueó el autoplay.",
                     error
                 );
 
@@ -101,55 +211,78 @@
 
 
             /*
-             * Eventos
+             * STREAM LISTO
              */
-
-            player.addEventListener(
-                IVSPlayer.PlayerState.PLAYING,
-                () => {
-
-                    console.log("Stream reproduciéndose");
-
-                }
-            );
-
-
-            player.addEventListener(
-                IVSPlayer.PlayerState.BUFFERING,
-                () => {
-
-                    console.log("Buffering...");
-
-                }
-            );
-
-
             player.addEventListener(
                 IVSPlayer.PlayerState.READY,
                 () => {
 
-                    console.log("Reproductor IVS listo");
-
-                }
-            );
-
-
-            player.addEventListener(
-                IVSPlayer.PlayerEventType.ERROR,
-                (error) => {
-
-                    console.error(
-                        "Error del reproductor IVS:",
-                        error
+                    console.log(
+                        "Amazon IVS listo."
                     );
 
                 }
             );
 
+
+            /*
+             * STREAM REPRODUCIÉNDOSE
+             */
+            player.addEventListener(
+                IVSPlayer.PlayerState.PLAYING,
+                () => {
+
+                    console.log(
+                        "Stream reproduciéndose."
+                    );
+
+                    loadingOverlay.classList.add(
+                        "hidden"
+                    );
+
+                }
+            );
+
+
+            /*
+             * BUFFERING
+             */
+            player.addEventListener(
+                IVSPlayer.PlayerState.BUFFERING,
+                () => {
+
+                    console.log(
+                        "Buffering..."
+                    );
+
+                }
+            );
+
+
+            /*
+             * ERROR
+             */
+            player.addEventListener(
+                IVSPlayer.PlayerEventType.ERROR,
+                (error) => {
+
+                    console.error(
+                        "Error Amazon IVS:",
+                        error
+                    );
+
+                    loadingOverlay.classList.remove(
+                        "hidden"
+                    );
+
+                }
+            );
+
+
         } else {
 
             console.error(
-                "Este navegador no es compatible con Amazon IVS."
+                "Este navegador no soporta Amazon IVS."
             );
 
         }
