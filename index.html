@@ -7,6 +7,9 @@
   
   <!-- SDK del Reproductor de Amazon IVS -->
   <script src="https://live-video.net"></script>
+
+  <!-- Importar Fuentes de Íconos (FontAwesome para el logo de Twitch y Kick) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
     body {
@@ -41,18 +44,41 @@
       background: #18181c;
       display: flex;
       gap: 15px;
+      align-items: center;
     }
     .social-btn {
       padding: 10px 20px;
-      border-radius: 5px;
+      border-radius: 8px; /* Esquinas más redondeadas */
       text-decoration: none;
-      color: #fff;
       font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px; /* Espacio entre ícono y texto */
+      font-size: 16px;
+      transition: transform 0.2s; /* Pequeña animación al pasar el mouse */
     }
-    .btn-kick { background: #53fc18; color: #000; }
-    .btn-twitter { background: #1da1f2; }
-    .btn-instagram { background: #e1306c; }
+    .social-btn:hover {
+      transform: translateY(-2px); /* Efecto de elevación */
+    }
+
+    /* Estilo Botón Kick (Verde Neón) */
+    .btn-kick { 
+      background-color: #53fc18; 
+      color: #000; 
+    }
+
+    /* Estilo Botón Twitch (Morado) */
+    .btn-twitch { 
+      background-color: #9146FF; 
+      color: #fff; 
+    }
     
+    /* Estilo Botón Twitter (Azul) */
+    .btn-twitter { 
+      background-color: #1da1f2; 
+      color: #fff; 
+    }
+
     .chat-container {
       flex: 1;
       min-width: 340px;
@@ -72,40 +98,45 @@
     <!-- Sección Izquierda: Video + Redes -->
     <div class="main-content">
       <div class="video-container">
-        <!-- Elemento de video para Amazon IVS -->
         <video id="video-player" controls playsinline></video>
       </div>
       <div class="social-links">
-        <a href="https://kick.com/TU_USUARIO" target="_blank" class="social-btn btn-kick">Kick Profile</a>
-        <a href="https://x.com/TU_USUARIO" target="_blank" class="social-btn btn-twitter">Twitter / X</a>
-        <a href="https://instagram.com/TU_USUARIO" target="_blank" class="social-btn btn-instagram">Instagram</a>
+        <!-- BOTÓN KICK: Se agregó la clase .btn-kick y el ícono de FontAwesome -->
+        <a href="https://kick.com/TU_USUARIO" target="_blank" class="social-btn btn-kick">
+          <i class="fa-solid fa-k"></i> Suscribirse
+        </a>
+        
+        <!-- BOTÓN TWITCH: Se agregó la clase .btn-twitch y el ícono de FontAwesome -->
+        <a href="https://twitch.tv/TU_USUARIO" target="_blank" class="social-btn btn-twitch">
+          <i class="fa-brands fa-twitch"></i> Suscribirse
+        </a>
+
+        <!-- BOTÓN TWITTER: Se mantuvo el estilo previo pero se mejoró con la clase .social-btn -->
+        <a href="https://x.com/TU_USUARIO" target="_blank" class="social-btn btn-twitter">
+          <i class="fa-brands fa-twitter"></i> Síguenos
+        </a>
       </div>
     </div>
 
     <!-- Sección Derecha: Chat Incrustado de Kick -->
     <div class="chat-container">
-      <!-- Reemplaza TU_USUARIO por tu nombre de canal exacto en Kick -->
       <iframe src="https://kick.com/popout/TU_USUARIO/chat"></iframe>
     </div>
   </div>
 
   <script>
     (function() {
-      // 1. Verificar compatibilidad del SDK de IVS
       if (!IVSPlayer.isPlayerSupported) {
         console.error("El reproductor de Amazon IVS no es compatible con este navegador.");
         return;
       }
-
-      // 2. Inicializar el reproductor acoplándolo al tag <video>
       const player = IVSPlayer.create();
       player.attachHTMLVideoElement(document.getElementById('video-player'));
-
-      // 3. Cargar la URL de reproducción (.m3u8) provista por tu consola AWS IVS
-      const playbackUrl = "https://TU_ID_PLAYBACK.codes.us-east-1.playback.live-video.net/api/video/v1/us-east-1.CUENTA.channel.M3U8_ID.m3u8";
-      player.load(playbackUrl);
       
-      // 4. Iniciar la reproducción automáticamente
+      // --- RECUERDA EDITAR AQUÍ CON TU URL DE AWS IVS ---
+      const playbackUrl = "https://TU_ID_PLAYBACK.codes.us-east-1.playback.live-video.net/api/video/v1/us-east-1.CUENTA.channel.M3U8_ID.m3u8";
+      
+      player.load(playbackUrl);
       player.play();
     })();
   </script>
